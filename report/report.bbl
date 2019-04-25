@@ -5,6 +5,10 @@ Finn, C., Abbeel, P., and Levine, S. (2017).
 \newblock {Model-Agnostic Meta-Learning for Fast Adaptation of Deep Networks}.
 \newblock {\em CoRR}, abs/1703.03400.
 
+\bibitem[Gildenblat, 2017]{jacobgilblog}
+Gildenblat, J. (2017).
+\newblock {Pruning deep neural networks to make them fast and small}.
+
 \bibitem[Gordon et~al., 2018]{morphnet}
 Gordon, A., Eban, E., Nachum, O., Chen, B., Wu, H., Yang, T.-J., and Choi, E.
   (2018).
@@ -57,10 +61,10 @@ Luo, J., Wu, J., and Lin, W. (2017).
   Compression}.
 \newblock {\em CoRR}, abs/1707.06342.
 
-\bibitem[Molchanov et~al., 2016]{prune_transfer_learning}
-Molchanov, P., Tyree, S., Karras, T., Aila, T., and Kautz, J. (2016).
+\bibitem[Molchanov et~al., 2017]{prune_transfer_learning}
+Molchanov, P., Tyree, S., Karras, T., Aila, T., and Kautz, J. (2017).
 \newblock {Pruning Convolutional Neural Networks for Resource Efficient
-  Transfer Learning}.
+  Inference}.
 \newblock {\em CoRR}, abs/1611.06440.
 
 \bibitem[Yu et~al., 2017]{prune_nisp}

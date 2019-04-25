@@ -103,7 +103,23 @@ The above points motivate the main idea proposed in this work: designing pruning
 
 \subsection{Pruning Convolution Filters}
 
+One method to prune convolutional layers is to reduce the number of output channels in each layer, which involves reducing the size of associated weight matrices. This impacts not only the convolution layer being pruned, but also the number of input channels in the next layer of the network. This approach was proposed by \cite{prune_transfer_learning}, and has since been implemented via open-source code provided by \cite{jacobgilblog}. However, this implementation only allows for pruning a single output channel at a time. We have implemented a version of this technique that allows pruning out several filters simultaneously, greatly improving the efficiency of aforementioned the code.
+
+Although a relatively sophisticated strategy for picking pruned channels was presented by \cite{prune_transfer_learning}, in our implementation we use two simple metrics to decide which channels are to be pruned: the 2-norm of the layer's activations, and the 2-norm of weights. In each case, pruning occurs after every $N_i$ epochs, until training is complete. The number of output channels to prune, $N_p$, is set via the hyperparameter $p$, which is a percentage of the total available parameters in that network, $N_\mathrm{total}$:
+\begin{align}
+	N_p = \mathrm{round} \left(\dfrac{p}{100}N_\mathrm{total}\right).
+\end{align}
+In the activation-based approach, the activations of each layer are accumulated over the $N_i$ epochs preceding a single pruning pass via the function \texttt{TrackConv2DNorms}. This is done as follows: at each training iteration, we compute the 2-norm of the activations of each layer, across all of the input data dimensions (function \texttt{ComputeConv2DActNorms}). The output of this is a vector whose size is the number of output channels of a particular layer, and one such vector is constructed for each convolution layer. These vectors represent the strength of the activations of each filter. Optionally, these vectors can be normalized to their maximum values to ensure that every set of $N_i$ epochs is equally represented.
+
+The new activation norm vectors computed at each iteration are added to the previously stored vectors. Every $N_i$ epochs, we look at the accumulated activation vector and extract the indices corresponding to the $N_p$ smallest activations (function \texttt{PruneAllConv2DLayers}). This tells us the $N_p$ filters of each layer which had, on average, the weakest activations over the last $N_i$ epochs. Those filters are then pruned away, and the old model is replaced with the updated, smaller model (function \texttt{PruneConvLayers}). At this stage, the accumulated activation norm vectors are reset to their initial state, ready to start accumulating activations for the next $N_i$ epochs.
+
+When pruning based on weights, the strategy is the same as above, except that rather than accumulating activations, we accumulate the 2-norms of the weight matrices themselves. The 2-norms are computed over the input channel dimension, and over the kernel of each filter (function \texttt{ComputeConv2DWeightNorms}). Again, this yields, for each layer, a vector containing 2-norms corresponding to the weights of each output channel. This can also be optionally normalized to the maximum value in each vector. Every $N_i$ epochs, these accumulated vectors are used to prune away the weakest $N_p$ filters.
+
+The methodology described above is summarized in \algoref{FilterPruneBasic}.
+The results of both methods in comparison to the baseline (no pruning) are discussed below.
+
 \subsubsection{Activation-Based Pruning}
+
 
 \subsubsection{Weight-Based Pruning}
 
