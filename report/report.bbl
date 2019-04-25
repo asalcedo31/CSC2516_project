@@ -57,21 +57,11 @@ Luo, J., Wu, J., and Lin, W. (2017).
   Compression}.
 \newblock {\em CoRR}, abs/1707.06342.
 
-\bibitem[Molchanov et~al., 2016a]{prune_transfer_learning}
-Molchanov, P., Tyree, S., Karras, T., Aila, T., and Kautz, J. (2016a).
+\bibitem[Molchanov et~al., 2016]{prune_transfer_learning}
+Molchanov, P., Tyree, S., Karras, T., Aila, T., and Kautz, J. (2016).
 \newblock {Pruning Convolutional Neural Networks for Resource Efficient
   Transfer Learning}.
 \newblock {\em CoRR}, abs/1611.06440.
-
-\bibitem[Molchanov et~al., 2016b]{prune_inference}
-Molchanov, P., Tyree, S., Karras, T., Aila, T., and Kautz, J. (2016b).
-\newblock {Pruning Convolutional Neural Networks for Resource Efficient
-  Transfer Learning}.
-\newblock {\em CoRR}, abs/1611.06440.
-
-\bibitem[Prechelt, 1995]{lprune}
-Prechelt, L. (1995).
-\newblock {Adaptive Parameter Pruning in Neural Networks}.
 
 \bibitem[Yu et~al., 2017]{prune_nisp}
 Yu, R., Li, A., Chen, C., Lai, J., Morariu, V.~I., Han, X., Gao, M., Lin, C.,
