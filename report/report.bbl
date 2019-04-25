@@ -1,0 +1,76 @@
+\begin{thebibliography}{}
+
+\bibitem[Finn et~al., 2017]{metalearning1}
+Finn, C., Abbeel, P., and Levine, S. (2017).
+\newblock {Model-Agnostic Meta-Learning for Fast Adaptation of Deep Networks}.
+\newblock {\em CoRR}, abs/1703.03400.
+
+\bibitem[Han et~al., 2015]{NIPS_learning_weights_pruning}
+Han, S., Pool, J., Tran, J., and Dally, W.~J. (2015).
+\newblock {Learning Both Weights and Connections for Efficient Neural
+  Networks}.
+\newblock In {\em {Proceedings of the 28th International Conference on Neural
+  Information Processing Systems - Volume 1}}, {NIPS'15}, pages 1135--1143,
+  Cambridge, MA, USA. MIT Press.
+
+\bibitem[{Hassibi} et~al., 1993]{OBS}
+{Hassibi}, B., {Stork}, D.~G., and {Wolff}, G.~J. (1993).
+\newblock {Optimal Brain Surgeon and General Network Pruning}.
+\newblock In {\em IEEE International Conference on Neural Networks}, pages
+  293--299 vol.1.
+
+\bibitem[LeCun et~al., 1990]{OBD}
+LeCun, Y., Denker, J.~S., and Solla, S.~A. (1990).
+\newblock {Advances in Neural Information Processing Systems 2}.
+\newblock chapter Optimal Brain Damage, pages 598--605. Morgan Kaufmann
+  Publishers Inc., San Francisco, CA, USA.
+
+\bibitem[Li et~al., 2017]{metalearning2}
+Li, D., Yang, Y., Song, Y., and Hospedales, T.~M. (2017).
+\newblock {Learning to Generalize: Meta-Learning for Domain Generalization}.
+\newblock {\em CoRR}, abs/1710.03463.
+
+\bibitem[Liu et~al., 2017]{prune_slimming}
+Liu, Z., Li, J., Shen, Z., Huang, G., Yan, S., and Zhang, C. (2017).
+\newblock {Learning Efficient Convolutional Networks through Network Slimming}.
+\newblock {\em CoRR}, abs/1708.06519.
+
+\bibitem[Liu et~al., 2019]{prune_for_architecture}
+Liu, Z., Sun, M., Zhou, T., Huang, G., and Darrell, T. (2019).
+\newblock {Rethinking the Value of Network Pruning}.
+\newblock In {\em International Conference on Learning Representations}.
+
+\bibitem[Luo and Wu, 2017]{prune_entropy}
+Luo, J. and Wu, J. (2017).
+\newblock {An Entropy-based Pruning Method for {CNN} Compression}.
+\newblock {\em CoRR}, abs/1706.05791.
+
+\bibitem[Luo et~al., 2017]{prune_thinet}
+Luo, J., Wu, J., and Lin, W. (2017).
+\newblock {{ThiNet}: {A} Filter Level Pruning Method for Deep Neural Network
+  Compression}.
+\newblock {\em CoRR}, abs/1707.06342.
+
+\bibitem[Molchanov et~al., 2016a]{prune_transfer_learning}
+Molchanov, P., Tyree, S., Karras, T., Aila, T., and Kautz, J. (2016a).
+\newblock {Pruning Convolutional Neural Networks for Resource Efficient
+  Transfer Learning}.
+\newblock {\em CoRR}, abs/1611.06440.
+
+\bibitem[Molchanov et~al., 2016b]{prune_inference}
+Molchanov, P., Tyree, S., Karras, T., Aila, T., and Kautz, J. (2016b).
+\newblock {Pruning Convolutional Neural Networks for Resource Efficient
+  Transfer Learning}.
+\newblock {\em CoRR}, abs/1611.06440.
+
+\bibitem[Prechelt, 1995]{lprune}
+Prechelt, L. (1995).
+\newblock {Adaptive Parameter Pruning in Neural Networks}.
+
+\bibitem[Yu et~al., 2017]{prune_nisp}
+Yu, R., Li, A., Chen, C., Lai, J., Morariu, V.~I., Han, X., Gao, M., Lin, C.,
+  and Davis, L.~S. (2017).
+\newblock {{NISP}: Pruning Networks using Neuron Importance Score Propagation}.
+\newblock {\em CoRR}, abs/1711.05908.
+
+\end{thebibliography}

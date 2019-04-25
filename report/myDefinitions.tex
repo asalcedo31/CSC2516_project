@@ -1,0 +1,205 @@
+% Packages to include
+\usepackage{helvet}
+\usepackage{tikz}
+\usepackage{tikz-3dplot}
+\usetikzlibrary{backgrounds,3d,shadings,shapes.misc,decorations.pathmorphing,shapes,calc}
+%\usepackage{cite}
+\usepackage{amssymb,amsmath}
+\usepackage{booktabs} % for much better looking tables
+\usepackage{mathtools}
+%\usepackage{bbding}
+\usepackage{graphicx} % support the \includegraphics command and options
+\usepackage{subfig}
+\usepackage{array} % for better arrays \left(eg matrices\right) in maths
+\usepackage{paralist} % very flexible & customisable lists \left(eg. enumerate/itemize, etc.\right)
+\usepackage{verbatim} % adds environment for commenting out blocks of text & for better verbatim
+\usepackage[labelfont=bf,labelsep=space]{caption} % might need to comment this out in case of conflicts
+\usepackage{sectsty} % might need to comment this out in case of conflicts
+\usepackage{dblfloatfix} % might need to comment this out in case of conflicts
+\usepackage[space]{grffile} % might need to comment this out in case of conflicts
+\usepackage{url} % might need to comment this out in case of conflicts
+\usepackage[toc]{appendix} % might need to comment this out in case of conflicts
+\usepackage[titles,subfigure]{tocloft} % Alter the style of the Table of Contents. Might need to comment this out in case of conflicts
+%\usepackage{geometry} % to change the page dimensions
+%\geometry{letterpaper}
+\usepackage[breakable, theorems, skins]{tcolorbox}
+\usepackage{algorithm} % algorithms
+\usepackage[noend]{algpseudocode} % algorithms
+%\usepackage{hyperref}
+\usepackage{pgfplots}
+\usepackage{cancel}
+\usepackage{bm}
+\newcommand{\bs}[1]{\bm{\mathrm{#1}}}
+
+% ---- Definitions ----
+
+% Template for algorithms, source: https://tex.stackexchange.com/questions/163768/write-pseudo-code-in-latex
+
+%\begin{algorithm}
+%	\caption{Meta-pruning for weights} \label{alg1}
+%	\begin{algorithmic}[1]
+%		\Procedure{MyProcedure}{}
+%		\State $\textit{stringlen} \gets \text{length of }\textit{string}$
+%		\State $i \gets \textit{patlen}$
+%		\BState \emph{top}:
+%		\If {$i > \textit{stringlen}$} \Return false
+%		\EndIf
+%		\State $j \gets \textit{patlen}$
+%		\BState \emph{loop}:
+%		\If {$\textit{string}(i) = \textit{path}(j)$}
+%		\State $j \gets j-1$.
+%		\State $i \gets i-1$.
+%		\State \textbf{goto} \emph{loop}.
+%		\State \textbf{close};
+%		\EndIf
+%		\State $i \gets i+\max(\textit{delta}_1(\textit{string}(i)),\textit{delta}_2(j))$.
+%		\State \textbf{goto} \emph{top}.
+%		\EndProcedure
+%	\end{algorithmic}
+%\end{algorithm}
+
+
+
+% Coloured boxes for highlighting text, e.g. for summaries, theorems, etc.
+\DeclareRobustCommand{\colourbox}[2][gray!20]{%
+	\begin{tcolorbox}[   %% Adjust the following parameters at will.
+		breakable,
+		left=0pt,
+		right=0pt,
+		top=0pt,
+		bottom=0pt,
+		colback=#1,
+		colframe=#1,
+		width=\dimexpr\textwidth\relax, 
+		enlarge left by=0mm,
+		boxsep=5pt,
+		arc=0pt,outer arc=0pt,
+		]
+		#2
+	\end{tcolorbox}
+}
+
+
+% ---- My definitions ----
+%\DeclareMathOperator{\pv}{pv}
+%\DeclareMathOperator{\sign}{sign}
+%\DeclareMathOperator{\ber}{ber}
+%\DeclareMathOperator{\bei}{bei}
+%\newcommand{\vect}[1]{\mathbf{#1}}
+%\newcommand{\nhat}{\mathbf{\hat{n}}}
+\newcommand{\vect}[1]{\vec{#1}}
+\newcommand{\nhat}{{\hat{n}}}
+\newcommand{\nvec}{{\hat{n}}}
+\newcommand{\ver}[1]{\hat{#1}}
+%\newcommand{\matr}[1]{\mathbf{#1}}
+\newcommand{\matr}[1]{\bs{#1}}
+\newcommand{\abs}[1]{\left \lvert #1 \right\rvert }
+\newcommand{\norm}[1]{ \left \lVert #1 \right \rVert} 
+%\newcommand{\pvint}{\pv\!\!\int}
+\newcommand{\pvint}{\dashint}
+\newcommand{\intR}{\int_{-\infty}^{+\infty}}
+\newcommand{\pvintR}{\pvint_{-\infty}^{+\infty}}
+\newcommand{\laplace}[1]{\mathscr{L}\{#1\}}
+\newcommand{\ilaplace}[1]{\mathscr{L}^{-1}\{#1\}}
+\newcommand{\blaplace}[1]{\mathscr{L}_b\{#1\}}
+\newcommand{\fourier}[1]{\mathscr{F}\{#1\}}
+\newcommand{\ifourier}[1]{\mathscr{F}^{-1}\{#1\}}
+\renewcommand{\Re}[1]{\mathbb{R}\mathrm{e}\left \{#1\right\} }
+\renewcommand{\Im}[1]{\mathbb{I}\mathrm{m}\left \{#1\right\} }
+\newcommand{\Real}{\mathbb{R}}
+\newcommand{\Complex}{\mathbb{C}}
+% Sets
+\newcommand{\complem}[1]{#1^{\rm C}}
+\newcommand{\expon}[1]{\operatorname{e}^{\,#1}}
+\newcommand{\ns}{\!\!\!\!}
+\newcommand{\pref}[1]{(\ref{#1})}
+\newcommand{\junk}[1] {}
+\newcommand{\missing}[1]{\vspace*{\parskip}
+			\centerline{\framebox{\begin{minipage}{0.9\columnwidth}{\large\bf\noindent #1}
+				\end{minipage}}}
+			\vspace*{\parskip}}
+
+
+% Principal value integral sign
+\def\Xint#1{\mathchoice
+{\XXint\displaystyle\textstyle{#1}}%
+{\XXint\textstyle\scriptstyle{#1}}%
+{\XXint\scriptstyle\scriptscriptstyle{#1}}%
+{\XXint\scriptscriptstyle\scriptscriptstyle{#1}}%
+\!\int}
+\def\XXint#1#2#3{{\setbox0=\hbox{$#1{#2#3}{\int}$}
+\vcenter{\hbox{$#2#3$}}\kern-.5\wd0}}
+\def\ddashint{\Xint=}
+\def\dashint{\Xint-}
+
+\newcommand*\widebar[1]{%
+  \hbox{%
+    \vbox{%
+      \hrule height 0.5pt % The actual bar
+      \kern0.3ex%         % Distance between bar and symbol
+      \hbox{%
+        \kern-0.05em%      % Shortening on the left side
+        \ensuremath{#1}%
+        \kern-0.05em%      % Shortening on the right side
+      }%
+    }%
+  }%
+} 
+
+
+\renewcommand{\epsilon}{\varepsilon}
+
+\newcommand{\dbd}[2]{\ensuremath{\dfrac{d#1}{d#2}}}
+\newcommand{\ddt}[1]{\ensuremath{\dfrac{d#1}{dt}}}
+\newcommand{\ddx}[1]{\ensuremath{\dfrac{d#1}{dx}}}
+\newcommand{\ddy}[1]{\ensuremath{\dfrac{d#1}{dy}}}
+\newcommand{\ddz}[1]{\ensuremath{\dfrac{d#1}{dz}}}
+
+\newcommand{\pardt}[1]{\ensuremath{\dfrac{\partial#1}{\partial t}}}
+\newcommand{\pardx}[1]{\ensuremath{\dfrac{\partial#1}{\partial x}}}
+\newcommand{\pardy}[1]{\ensuremath{\dfrac{\partial#1}{\partial y}}}
+\newcommand{\pardz}[1]{\ensuremath{\dfrac{\partial#1}{\partial z}}}
+
+\newcommand{\pardtsq}[1]{\ensuremath{\dfrac{\partial^2#1}{\partial t^2}}}
+\newcommand{\pardxsq}[1]{\ensuremath{\dfrac{\partial^2#1}{\partial x^2}}}
+\newcommand{\pardysq}[1]{\ensuremath{\dfrac{\partial^2#1}{\partial y^2}}}
+\newcommand{\pardzsq}[1]{\ensuremath{\dfrac{\partial^2#1}{\partial z^2}}}
+
+\newcommand{\curl}[1]{\ensuremath{\nabla\times\bs{#1}}}
+\newcommand{\tensor}[1]{\ensuremath{\bar{\bar{#1}}}}
+\newcommand{\figref}[1]{Fig.~\ref{#1}}
+
+\newcommand{\opL}{\mathcal{L}} % L operator
+\newcommand{\opK}{\mathcal{K}} % K operator
+
+% Theorems, laws, definitions environments
+\newtheorem{defn}{Definition}
+\newtheorem{thm}{Theorem}
+\newtheorem{exm}{Example}
+\newtheorem{rmk}{Remark}
+
+
+\usepackage{listings}
+\usepackage{color}
+
+\definecolor{mygreen}{RGB}{28,172,0} % color values Red, Green, Blue
+\definecolor{mylilas}{RGB}{170,55,241}
+
+\lstset{language=Matlab,%
+	%basicstyle=\color{red},
+	basicstyle=\ttfamily,
+	breaklines=true,%
+	morekeywords={matlab2tikz},
+	%keywordstyle=\color{blue},%
+	morekeywords=[2]{1}, keywordstyle=[2]{\color{black}},
+	identifierstyle=\color{black},%
+	stringstyle=\color{mylilas},
+	commentstyle=\color{mygreen},%
+	showstringspaces=false,%without this there will be a symbol in the places where there is a space
+	numbers=left,%
+	numberstyle={\tiny \color{black}},% size of the numbers
+	numbersep=9pt, % this defines how far the numbers are from the text
+	emph=[1]{for,end,break},emphstyle=[1]\color{blue}, %some words to emphasise
+	%emph=[2]{word1,word2}, emphstyle=[2]{style},    
+}
+
