@@ -88,17 +88,44 @@
 
 \section{Introduction}
 
-Modern neural networks tend to be immensely large with several millions of connections and weights. The memory and energy requirements for deploying such networks is significant, and constantly growing with the complexity of state-of-the-art networks. Although having a large number of trainable parameters is beneficial to network accuracy, it was shown by \citet{NIPS_learning_weights_pruning}, \citet{OBD} and \citet{OBS} that the impact of some parameters is negligible in comparison with others. Successful identification and removal (``pruning'') of such parameters would lead to smaller and faster networks, which in turn would significantly reduce the computational cost at test time. The goal of most pruning algorithms is to achieve this computational advantage without an appreciable impact on accuracy. 
+Modern neural networks tend to be immensely large with several millions of connections and weights. The memory and energy requirements for deploying such networks is significant, and constantly growing with the complexity of state-of-the-art networks. Although having a large number of trainable parameters is beneficial to network accuracy, it was shown by \citet{NIPS_learning_weights_pruning}, \citet{OBD} and \citet{OBS} that the impact of some parameters is negligible in comparison with others. Successful identification and removal (``pruning'') of such parameters would lead to smaller and faster networks, which in turn would significantly reduce the computational cost at test time. The goal of most pruning algorithms is to achieve computational advantages without an appreciable impact on accuracy. The importance and relevance of network pruning was recently highlighted via MorphNet, proposed by \citet{morphnet} at Google to optimize existing networks through pruning.
 
-and gained initial popularity due to \citet{OBD} and \citet{OBS}. Since then, pruning has been applied in various forms and continues to be an area of research , and more recently by \citet{prune_for_architecture}.
+It was argued by \citet{prune_inference} that pruning can also be applied in the context of transfer learning, for generalization of a trained network to related datasets. Improved ability of networks to generalize as a result of pruning was also achieved by \citet{prune_for_architecture}. However, these approaches target networks that have been trained on a single dataset. In contrast, the concept of learning the hyperparameters of a network by using multiple datasets, known as ``meta-learning", has also been proposed by \citet{metalearning1}. To the best of our knowledge, this concept has not been applied in the context of network pruning.
 
-However, these weights can only be identified either after~\citet{NIPS_learning_weights_pruning}, or during~\citet{OBD, OBS, lprune} training. The process of identifying and removing these weights has been shown to provide significant savings in memory and energy consumption~\citet{NIPS_learning_weights_pruning}, and is known as pruning. Furthermore, architectures obtained as a result of pruning may show superior efficiency and generalizability relative to the full architecture, regardless of the weights~\citet{prune_for_architecture}.
+The above points motivate the main idea proposed in this work: designing pruning methodologies that specifically target improved generalization of a given network, by leveraging multiple datasets during training. The goal is to optimize existing networks not only to be faster and smaller, but also to improve their ability to generalize. We first implement and study some simple and commonly-used pruning strategies and analyze their impact on network size, speed and accuracy. We then discuss and implement a simple meta-learning algorithm and study its performance. Finally, we combine the pruning strategies with the meta-learning algorithm to introduce a proof-of-concept ``meta-pruning'' methodology.
+
+
+\section{A Study on Simple Pruning Algorithms}
+
+
+
+
+\ \\ 
+\ \\
+\ \\
+**************** Text below is copied from proposal ****************
 
 A variety of pruning algorithms have been proposed, many of which apply to convolutional neural networks. Some remove individual weights (leading to sparse weight matrices) while others remove entire filters, channels or layers. Units may be removed based on many criteria, including their magnitude, their contribution to the final loss (approximated through their gradients), and information criteria such as entropy~\citet{NIPS_learning_weights_pruning, prune_transfer_learning, prune_entropy, prune_slimming}.  Pruning may be applied towards a human-defined architecture (e.g. removing a certain proportion of weights in each layer)~\citet{prune_nisp} or help determine the final architecture autonomously~\citet{prune_thinet}. 
 
 \section{Goals}
 
-In previous works referenced above, pruning has been applied with respect to a particular training set. Pruning can lead to better generalization to related datasets (transfer learning)~\citet{prune_inference}, but the actual process of pruning has only been applied to one training set at a time. In this project, we propose to extend existing pruning algorithms to make them data-agnostic, at least for related datasets, and improve generalizability. A meta-learning algorithm has already been proposed~\citet{metalearning1} to initialize training parameters in a data-agnostic way. We propose to combine the idea of meta-learning with pruning, to obtain a pruning algorithm that is data-agnostic. We refer to this concept as "meta-pruning''. The basic algorithm is provided below:
+
+
+
+
+After each dataset sample, only connections that survive pruning and thus contribute to the final loss will be retained.  At the beginning of each dataset sample, weights will be initialized with the value of the updated weights in the previous sample. We hypothesize that this approach will result in weights that are important for a broad set of related tasks. 
+
+It has been suggested~\citet{prune_for_architecture} that pruning can also improve algorithm efficiency by virtue of the resulting architecture, rather than just the resulting weights. Therefore, we will also assess a modified meta-pruning algorithm that only retains the architecture, and not the weights, across datasets:
+
+
+
+We hypothesize that this approach will result in architectures that are more generalizable and efficient than the full model. Comparing the two approaches in algorithms 1 and 2 will illuminate the relative contributions of the weights and the architecture to the value of pruning for generalizability. 
+
+\section{Methods}
+
+We will first select a relatively simple pruning algorithm that can be adapted to the meta-pruning approach described above, as a proof of concept. Since pruning studies to date have largely focused on convolutional neural networks, we will develop our algorithm in the context of image recognition, initially working with the CIFAR-100 data. For the initial model, we will use VGGNet due to its simple architecture and expand to ResNet if time allows. To assess our algorithms' baseline performance, we will use test images which have the same categories as the training images. We will then assess our algorithms' capacity to generalize using a test set that contains a distinct set of categories from the training set. We will use cross entropy loss and assess the algorithms' performance by comparing its classification accuracy to the accuracy of the full model, as well as a reduced model with the same number of connections but where connections are randomly dropped. We will also compare the training time, memory requirements, and the number of retained parameters to assess the algorithms' efficiency and quantify the amount of compression achieved.
+
+An important consideration in the proposed algorithms is the consequence of pruning to backpropagation. Particularly in algorithm 1, depending on the order in which operations are applied, special care must be taken to ensure that gradients are computed correctly for the pruned model, at each outer iteration. One way to circumvent the issue is to recompute gradients every time the model is updated via pruning. However, it may be possible to do this more intelligently by applying advanced techniques for gradients of discrete problems. This will be an area to explore, if time permits.
 
 \begin{algorithm}[t]
 	\caption{Meta-pruning for weights} \label{alg1}
@@ -115,10 +142,6 @@ In previous works referenced above, pruning has been applied with respect to a p
 	\end{algorithmic}
 \end{algorithm}
 
-After each dataset sample, only connections that survive pruning and thus contribute to the final loss will be retained.  At the beginning of each dataset sample, weights will be initialized with the value of the updated weights in the previous sample. We hypothesize that this approach will result in weights that are important for a broad set of related tasks. 
-
-It has been suggested~\citet{prune_for_architecture} that pruning can also improve algorithm efficiency by virtue of the resulting architecture, rather than just the resulting weights. Therefore, we will also assess a modified meta-pruning algorithm that only retains the architecture, and not the weights, across datasets:
-
 \begin{algorithm}[t]
 	\caption{Meta-pruning for architecture} \label{alg2}
 	\begin{algorithmic}[1]
@@ -134,14 +157,6 @@ It has been suggested~\citet{prune_for_architecture} that pruning can also impro
 		\EndFor
 	\end{algorithmic}
 \end{algorithm}
-
-We hypothesize that this approach will result in architectures that are more generalizable and efficient than the full model. Comparing the two approaches in algorithms 1 and 2 will illuminate the relative contributions of the weights and the architecture to the value of pruning for generalizability. 
-
-\section{Methods}
-
-We will first select a relatively simple pruning algorithm that can be adapted to the meta-pruning approach described above, as a proof of concept. Since pruning studies to date have largely focused on convolutional neural networks, we will develop our algorithm in the context of image recognition, initially working with the CIFAR-100 data. For the initial model, we will use VGGNet due to its simple architecture and expand to ResNet if time allows. To assess our algorithms' baseline performance, we will use test images which have the same categories as the training images. We will then assess our algorithms' capacity to generalize using a test set that contains a distinct set of categories from the training set. We will use cross entropy loss and assess the algorithms' performance by comparing its classification accuracy to the accuracy of the full model, as well as a reduced model with the same number of connections but where connections are randomly dropped. We will also compare the training time, memory requirements, and the number of retained parameters to assess the algorithms' efficiency and quantify the amount of compression achieved.
-
-An important consideration in the proposed algorithms is the consequence of pruning to backpropagation. Particularly in algorithm 1, depending on the order in which operations are applied, special care must be taken to ensure that gradients are computed correctly for the pruned model, at each outer iteration. One way to circumvent the issue is to recompute gradients every time the model is updated via pruning. However, it may be possible to do this more intelligently by applying advanced techniques for gradients of discrete problems. This will be an area to explore, if time permits.
 
 \section{Nice-to-haves}
 
