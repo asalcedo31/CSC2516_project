@@ -97,12 +97,39 @@ The above points motivate the main idea proposed in this work: designing pruning
 
 \section{A Study on Simple Pruning Algorithms}
 
+\subsection{Masking Classifier Layers}
+
+\subsection{Masking Convolution Filters}
+
+\subsection{Pruning Convolution Filters}
+
+\subsubsection{Activation-Based Pruning}
+
+\subsubsection{Weight-Based Pruning}
+
+\ \\ 
+\ \\
+\ \\
+**************** Dumping figures here for now ****************
+
+\begin{figure}[!t]
+	\centering
+	\includegraphics[width=11cm]{./results/baseline_pre_out_1_in_50_cifar10_10percent_acc.pdf}
+	\caption{Baseline accuracy of VGG16 pre-trained on ImageNet. All layers were re-trained on 10\% of CIFAR-10 data ($4000$ training images, $1000$ validation images) for $50$ epochs.}
+\end{figure}
+
+\begin{figure}[!t]
+	\centering
+	\includegraphics[width=11cm]{./results/baseline_pre_out_1_in_50_cifar10_10percent_loss.pdf}
+	\caption{Baseline loss of VGG16 pre-trained on ImageNet. All layers were re-trained on 10\% of CIFAR-10 data ($4000$ training images, $1000$ validation images) for $50$ epochs.}
+\end{figure}
 
 
 
 \ \\ 
 \ \\
 \ \\
+
 **************** Text below is copied from proposal ****************
 
 A variety of pruning algorithms have been proposed, many of which apply to convolutional neural networks. Some remove individual weights (leading to sparse weight matrices) while others remove entire filters, channels or layers. Units may be removed based on many criteria, including their magnitude, their contribution to the final loss (approximated through their gradients), and information criteria such as entropy~\citet{NIPS_learning_weights_pruning, prune_transfer_learning, prune_entropy, prune_slimming}.  Pruning may be applied towards a human-defined architecture (e.g. removing a certain proportion of weights in each layer)~\citet{prune_nisp} or help determine the final architecture autonomously~\citet{prune_thinet}. 
