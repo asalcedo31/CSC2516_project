@@ -118,9 +118,54 @@ When pruning based on weights, the strategy is the same as above, except that ra
 The methodology described above is summarized in \algoref{FilterPruneBasic}.
 The results of both methods in comparison to the baseline (no pruning) are discussed below.
 
+\begin{algorithm}[t]
+	\caption{Iterative convolution filter pruning - single dataset} \label{FilterPruneBasic}
+	\begin{algorithmic}[1]
+		\Function{PruneConvLayers}{${\matr{l}_\mathrm{idx}, \matr{f}_\mathrm{idx}, \mathrm{model}}$}
+			\State $\matr{c}_\mathrm{idx} \gets \matr{l}_\mathrm{idx}^\mathrm{th}\textit{ conv layer of } \mathrm{model}$
+			\State $\matr{w}_0 \gets \textit{weights of  } \matr{c}_\mathrm{idx}$
+			\State $\matr{w}_0 \gets \textit{delete entries corresponding to filters in }\matr{f}_\mathrm{idx}$
+			\State $\matr{c}_\mathrm{idx} \gets \textit{copy updated weights }\matr{w}_0$
+			\State $\mathrm{model} \gets \textit{updated conv layer }\matr{c}_\mathrm{idx} \textit{ at layer }\matr{l}_\mathrm{idx}$
+			\State \Return $\mathrm{model}$
+		\EndFunction
+		\\
+%		
+	\Function{ComputeConv2DWeightNorms}{${\mathrm{model}, \matr{n}_w}$}
+		\For {all $i$ in $\textit{convolution layers of }\mathrm{model}$}
+			\State $\widetilde{\matr{n}}_w \gets \textit{2-norm of weights of layer }i\textit{ across dims 1, 2, 3}$
+			\State $\widetilde{\matr{n}}_{w,i} \gets \widetilde{\matr{n}}_{w,i} / \max\abs{\widetilde{\matr{n}}_{w,i}} \textit{ (optional)}$
+			\State $\matr{n}_{w,i} \gets \textit{append }\widetilde{\matr{n}}_{w,i}$
+		\EndFor
+		\State \Return $\matr{n}_{w,i}$
+	\EndFunction
+	\\
+%	
+	\Function{ComputeConv2DActNorms}{${\mathrm{model}, \matr{n}_a}$}
+		\For {all $i$ in $\textit{convolution layers of }\mathrm{model}$}
+			\State $\widetilde{\matr{n}}_a \gets \textit{2-norm of activations of layer }i\textit{ across dims 0, 2, 3}$
+			\State $\widetilde{\matr{n}}_{a,i} \gets \widetilde{\matr{n}}_{a,i} / \max\abs{\widetilde{\matr{n}}_{a,i}} \textit{ (optional)}$
+			\State $\matr{n}_{a,i} \gets \textit{append }\widetilde{\matr{n}}_{a,i}$
+		\EndFor
+		\State \Return $\matr{n}_{a,i}$
+	\EndFunction
+
+		\State $\theta \gets \textit{Random initialization}$
+		\For {all $D$ in collection of datasets $\mathcal{D}$}
+		\State $T \gets \textit{Sample tasks from dataset } D$
+		\For {all $i$ in $T$}
+		\State $G_i \gets \nabla_{\theta,i} \mathcal{L} \left(f_{\theta,i}\right)$
+		\State $\theta_i \gets \theta_i - \beta G_i$
+		\EndFor
+		\State $\theta \gets \textit{Pruned and fine-tuned } \theta$
+		\EndFor
+	\end{algorithmic}
+\end{algorithm}
+
 \subsubsection{Activation-Based Pruning}
-
-
+Baseline time: 136m 58s
+Times: 19m 34s   19m 2s   17m 58s   16m 39s   16m 3s   15m 14s   13m 55s, total: 
+Filters: 4224.0   4020.0   3822.0   3637.0   3458.0   3294.0   3136.0
 \subsubsection{Weight-Based Pruning}
 
 \ \\ 
@@ -138,6 +183,20 @@ The results of both methods in comparison to the baseline (no pruning) are discu
 	\centering
 	\includegraphics[width=11cm]{./results/baseline_pre_out_1_in_50_cifar10_10percent_loss.pdf}
 	\caption{Baseline loss of VGG16 pre-trained on ImageNet. All layers were re-trained on 10\% of CIFAR-10 data ($4000$ training images, $1000$ validation images) for $50$ epochs.}
+\end{figure}
+
+
+
+\begin{figure}[!t]
+	\centering
+	\includegraphics[width=11cm]{./results/pPruneActNoNorm5_pre_out_7_in_7_cifar10_10percent_acc.pdf}
+	\caption{Accuracy of VGG16 pre-trained on ImageNet, re-trained with iterative activation-based filter pruning after every 7 epochs, for a total of 49 epochs. Re-trained was done on 10\% of CIFAR-10 data ($4000$ training images, $1000$ validation images).}
+\end{figure}
+
+\begin{figure}[!t]
+	\centering
+	\includegraphics[width=11cm]{./results/pPruneActNoNorm5_pre_out_7_in_7_cifar10_10percent_loss.pdf}
+	\caption{Loss of VGG16 pre-trained on ImageNet, re-trained with iterative activation-based filter pruning after every 7 epochs, for a total of 49 epochs. Re-trained was done on 10\% of CIFAR-10 data ($4000$ training images, $1000$ validation images).}
 \end{figure}
 
 
