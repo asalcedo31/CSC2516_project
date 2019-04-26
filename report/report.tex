@@ -92,7 +92,62 @@ Modern neural networks tend to be immensely large with several millions of conne
 
 It was argued by \citet{prune_transfer_learning} that pruning can also be applied in the context of transfer learning, for generalization of a trained network to related datasets. Improved ability of networks to generalize as a result of pruning was also achieved by \citet{prune_for_architecture}. However, these approaches target networks that have been trained on a single dataset. In contrast, the concept of learning the hyperparameters of a network by using multiple datasets, known as ``meta-learning", has also been proposed by \citet{metalearning1}. To the best of our knowledge, the meta-learning concept has not been applied in the context of network pruning.
 
-The above points motivate the main idea proposed in this work: designing pruning methodologies that specifically target improved generalization of a given network, by leveraging multiple datasets during training. The goal is to optimize existing networks not only to be faster and smaller, but also to improve their ability to generalize. We first implement and study some simple and commonly-used pruning strategies and analyze their impact on network size, speed and accuracy. We then discuss and implement a simple meta-learning algorithm and study its performance. Finally, we combine the pruning strategies with the meta-learning algorithm to introduce a proof-of-concept ``meta-pruning'' methodology.
+The above points motivate the main idea proposed in this work: designing pruning methodologies that specifically target improved generalization of a given network, by leveraging multiple datasets during training. The goal is to optimize existing networks not only to be faster and smaller, but also to improve their ability to generalize. We first implement and study some simple and commonly-used pruning strategies and analyze their impact on network size, speed and accuracy. We then discuss and implement a simple meta-learning algorithm and study its performance. Finally, we combine the pruning strategies with the meta-learning algorithm to introduce a proof-of-concept ``meta-pruning'' methodology. The general outline and structure of this paper are summarized in \figref{summaryFig}.
+
+\begin{figure}[t]
+	\centering
+	
+	% Define block styles
+	\tikzstyle{decision} = [diamond, draw, fill=blue!20, 
+	text width=4.5em, text badly centered, node distance=3cm, inner sep=0pt]
+	\tikzstyle{block} = [rectangle, draw, fill=blue!10, 
+	text width=5em, text centered, rounded corners, minimum height=2em]
+	\tikzstyle{line} = [draw, -latex', thick]
+	\tikzstyle{cloud} = [draw, rectangle, rounded corners, fill=red!20, node distance=2cm,
+	minimum height=4em, text width=8em]
+	\tikzstyle{heading} = [draw=none, ellipse, fill=none,
+	minimum height=2em]
+	
+	\begin{tikzpicture}[node distance = 2cm, auto]
+	% Place nodes
+	\node [heading] (survey) {\textbf{Survey on Simple Pruning Methods}};
+	\node [block, below left of=survey, node distance=2cm] (surveyClass) {Classifier};
+	\node [block, right of=surveyClass, node distance=3cm] (surveyFeature) {Features};
+%	
+	\node [cloud, below left of=surveyClass, node distance=3cm] (surveyClass1) {Masking based on a threshold};
+	\node [cloud, below of=surveyClass1, node distance=2cm] (surveyClass2) {Learned masking based on L0 norm};
+%	
+	\node [cloud, below right of=surveyFeature, node distance=3cm] (surveyFeature1) {Pruning filters based on accumulated activation or weight norms};
+	\node [cloud, below of=surveyFeature1, node distance=2cm] (surveyFeature2) {Learned masking based on L0 norm};
+%
+	\node [heading, below of=survey, node distance=7.0cm] (multidat) {\textbf{Pruning with Multiple Datasets for Generalization}};
+	\node [block, below left of=multidat, node distance=2cm] (multidatClass) {Classifier};
+	\node [block, right of=multidatClass, node distance=3cm] (multidatFeature) {Features};
+	%	
+	\node [cloud, below left of=multidatClass, node distance=3cm] (multidatClass1) {Intersection pruning with threshold-based masking};
+	\node [cloud, below of=multidatClass1, node distance=2cm] (multidatClass2) {Meta-pruning based on REPTILE with learned masking};
+	%	
+	\node [cloud, below right of=multidatFeature, node distance=3cm] (multidatFeature1) {Intersection pruning with accumulated activation- or weight-norm based filter pruning};
+%	
+%	% Draw edges
+	\path [line] (survey) -- (surveyClass);
+	\path [line] (survey) -- (surveyFeature);
+	\path [line] (surveyClass) |- (surveyClass1);
+	\path [line] (surveyClass) |- (surveyClass2);
+	\path [line] (surveyFeature) |- (surveyFeature1);
+	\path [line] (surveyFeature) |- (surveyFeature2);
+%	
+	\path [line] (multidat) -- (multidatClass);
+	\path [line] (multidat) -- (multidatFeature);
+	\path [line] (multidatClass) |- (multidatClass1);
+	\path [line] (multidatClass) |- (multidatClass2);
+	\path [line] (multidatFeature) |- (multidatFeature1);
+%	\path [line] (multidatFeature) |- (multidatFeature2);
+	\end{tikzpicture}
+	\vspace{4mm}
+	\caption{Outline of this paper.}
+	\label{summaryFig}
+\end{figure}
 
 \section{Formal Description}
 
@@ -227,6 +282,12 @@ The results of both methods in comparison to the baseline (no pruning) are discu
 
 \subsection{Pruning with Multiple Datasets}
 
+In this section, the goal is to study two possible techniques to train a network based on samples from multiple similar datasets, rather than a single one, to promote generalization of the network. Either technique can be applied either by training the network from scratch, based on multiple datasets, or by fine-tuning a network that was previously trained on a single dataset. Since transfer learning and pruning are both generally handled as a post-processing step of an existing trained network, we will focus on the latter approach. The two techniques we consider for training on multiple datasets are:
+\begin{itemize}
+	\item \textbf{Intersection Pruning:} In this approach, after every $N_i$ epochs, the pruning step is accompanied by resampling data from a different but related dataset. Thus, every successive set of $N_i$ epochs corresponds to a different dataset. Our hypothesis is that as the network gets pruned, the filters that are eliminated are the ones that are least important to that dataset. Thus, at the end of training, we expect that the surviving weights are the ones that are important for the intersection of all datasets.
+	\item \textbf{Meta-Pruning:} The goal of this approach is to learn a masking matrix applied to weights, where the mask is learned based on a probability metric and decides which weights are to be pruned. \textcolor{red}{Adriana can add more if needed, here or elsewhere} 
+\end{itemize}
+
 \subsubsection{Intersection Pruning of Classifier Layers Based on a Threshold} \label{intersectPruneClass}
 
 
@@ -235,7 +296,7 @@ The results of both methods in comparison to the baseline (no pruning) are discu
 
 \subsubsection{Intersection Pruning of Convolution Filters} \label{intersectPruneFilter}
 
-Our initial attempt at applying meta-pruning to convolution filters by using the L0 norm-based masking yielded significantly deteriorated training results. At the same time, the results obtained by weight- or activation-based pruning (rather than learned masking) were comparable to the baseline case of no pruning, discussed further in \secref{PruneFilterRes}. These observations motivated us to leverage multiple datasets in the sense of intersection pruning, as described earlier in \secref{intersectPruneClass}, to prune convolution layers. This method proceeds exactly as the description in \secref{PruneFilter}, except that after every $N_i$ epochs, the input data is resampled from a different dataset. The associated algorithm is summarized in \algoref{FilterPruneDriverMeta}.
+Our initial attempt at applying meta-pruning to convolution filters by using the L0 norm-based masking yielded significantly deteriorated training results. At the same time, the results obtained by weight- or activation-based pruning (rather than learned masking) were comparable to the baseline case of no pruning, discussed further in \secref{PruneFilterRes}. These observations motivated us to leverage multiple datasets in the sense of intersection pruning, to prune convolution layers. This method proceeds exactly as the description in \secref{PruneFilter}, except that after every $N_i$ epochs, the input data is resampled from a different dataset. The associated algorithm is summarized in \algoref{FilterPruneDriverMeta}.
 
 
 \section{Related Work}
@@ -259,7 +320,7 @@ Both activation-based and weight-based filter pruning approaches were studied. S
 
 Training and validation results for both pruning approaches are shown in \figref{pruneFiltersSingle}. The top row shows accuracy, while the bottom row shows loss. The first column on the left shows baseline results with no pruning. The second column shows activation-based filter pruning results, and the third column shows weight-based pruning results. It was found that normalization of the accumulated weight or activation vectors does not have a significant impact on the results, so we only show results for the case when the vectors are not normalized.
 
-The figures show that the both filter pruning approaches studied here decrease training accuracy compared to the baseline model by approximately $10$\% on average. However, the validation accuracy is only $3$--$5$\% lower than that obtained with the baseline model, on average. Furthermore, it is clear that the difference between training and validation accuracy in the baseline model is approximately $10$\%, while in the pruned networks, both training and validation performance are quite well balanced with respect to one another. This is an indicator that, as hypothesized, the pruned network has the potential to generalize better than the original network. The pruned network loss and accuracy are much less stable over epochs than the original model, which could perhaps be improved with more gradual pruning, or more sophisticated algorithms for choosing which filters to prune.
+The figures show that the both filter pruning approaches studied here decrease training accuracy compared to the baseline model by approximately $10$\% on average. However, the validation accuracy is only $3$--$5$\% lower than that obtained with the baseline model, on average. Furthermore, it is clear that the difference between training and validation accuracy in the baseline model is approximately $10$\%, while in the pruned networks, both training and validation performance are quite well balanced with respect to one another. This is an indicator that, as hypothesized, the pruned network has the potential to generalize better than the original network. The pruned network loss and accuracy are much less stable over epochs than the original model, which could perhaps be improved with more gradual pruning, or more sophisticated algorithms for choosing which filters to prune. As with any 
 %The second column shows results when the weight and activation vectors are \emph{not} normalized, while the second one shows results for when they \emph{are} normalized.
 \begin{figure}[!t]
 	\centering
