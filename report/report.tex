@@ -96,10 +96,11 @@ The above points motivate the main idea proposed in this work: designing pruning
 
 \section{Methods}
 
-\subsection{A Study on Simple Pruning Algorithms}
+\subsection{A Survey on Simple Pruning Algorithms}
 
-\subsubsection{Masking Classifier Layers}
+\subsubsection{Masking of Classifier Layers Based on a Threshold}
 
+\subsubsection{Learned Masking of Classifier Layers}
 
 \subsubsection{Pruning Convolution Filters}
 
@@ -224,12 +225,17 @@ The results of both methods in comparison to the baseline (no pruning) are discu
 	\end{algorithmic}
 \end{algorithm}
 
-\subsection{Meta-Pruning with Multiple Datasets}
+\subsection{Pruning with Multiple Datasets}
+
+\subsubsection{Intersection Pruning of Classifier Layers Based on a Threshold}
+
 
 \subsubsection{Meta-Pruning Classifier Layers}
 
 
-\subsubsection{Meta-Pruning Convolution Filters}
+\subsubsection{Intersection Pruning of Convolution Filters}
+
+
 
 
 \section{Related Work}
@@ -239,26 +245,34 @@ The results of both methods in comparison to the baseline (no pruning) are discu
 
 \subsection{A Study on Simple Pruning Algorithms}
 
-\subsubsection{Masking Classifier Layers}
+\subsubsection{Masking of Classifier Layers Based on a Threshold}
+
+\subsubsection{Learned Masking of Classifier Layers}
 
 \subsubsection{Pruning Convolution Filters}
 
-\subsubsection{Activation-Based Pruning}
+\begin{itemize}
+	
+	\item Activation-Based Pruning
+	Baseline time: 136m 58s
+	Times: 19m 34s   19m 2s   17m 58s   16m 39s   16m 3s   15m 14s   13m 55s, total: 
+	Filters: 4224.0   4020.0   3822.0   3637.0   3458.0   3294.0   3136.0
+	
+	\item Weight-Based Pruning
+	Times: 19m 42s   19m 10s   18m 8s   16m 46s   16m 10s   15m 20s  14m 2s
+	Filters: 
+	
+\end{itemize}
 
+\subsection{Pruning with Multiple Datasets}
 
-Baseline time: 136m 58s
-Times: 19m 34s   19m 2s   17m 58s   16m 39s   16m 3s   15m 14s   13m 55s, total: 
-Filters: 4224.0   4020.0   3822.0   3637.0   3458.0   3294.0   3136.0
-\subsubsection{Weight-Based Pruning}
-Times: 19m 42s   19m 10s   18m 8s   16m 46s   16m 10s   15m 20s  14m 2s
-Filters: 
+\subsubsection{Intersection Pruning of Classifier Layers Based on a Threshold}
 
-\subsection{Meta-Pruning with Multiple Datasets}
 
 \subsubsection{Meta-Pruning Classifier Layers}
 
 
-\subsubsection{Meta-Pruning Convolution Filters}
+\subsubsection{Intersection Pruning of Convolution Filters}
 
 
 \section{Limitations}

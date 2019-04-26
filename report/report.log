@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2019.3.1)  25 APR 2019 23:32
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2019.3.1)  25 APR 2019 23:46
 entering extended mode
  \write18 enabled.
  %&-line parsing enabled.
@@ -1535,19 +1535,25 @@ LaTeX Font Info:    Font shape `T1/ptm/bx/n' in size <14.4> not available
 
 
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}]
-Underfull \vbox (badness 5077) has occurred while \output is active []
+LaTeX Font Info:    Try loading font information for OMS+ptm on input line 256.
 
+
+(/usr/share/texlive/texmf-dist/tex/latex/psnfss/omsptm.fd
+File: omsptm.fd 
+)
+LaTeX Font Info:    Font shape `OMS/ptm/m/n' in size <10> not available
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 256.
  [2]
-Overfull \vbox (10.20229pt too high) has occurred while \output is active []
+Overfull \vbox (40.35225pt too high) has occurred while \output is active []
 
 
 [3]
-Underfull \hbox (badness 10000) in paragraph at lines 273--277
+Underfull \hbox (badness 10000) in paragraph at lines 287--291
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 273--277
+Underfull \hbox (badness 10000) in paragraph at lines 287--291
 
  []
 
@@ -1557,68 +1563,66 @@ File: ./results/baseline_pre_out_1_in_50_cifar10_10percent_acc.pdf Graphic file
  (type pdf)
 <use ./results/baseline_pre_out_1_in_50_cifar10_10percent_acc.pdf>
 Package pdftex.def Info: ./results/baseline_pre_out_1_in_50_cifar10_10percent_a
-cc.pdf  used on input line 280.
+cc.pdf  used on input line 294.
 (pdftex.def)             Requested size: 312.9803pt x 208.66234pt.
-<./results/baseline_pre_out_1_in_50_cifar10_10percent_loss.pdf, id=35, 433.62pt
+[4]
+<./results/baseline_pre_out_1_in_50_cifar10_10percent_loss.pdf, id=38, 433.62pt
  x 289.08pt>
 File: ./results/baseline_pre_out_1_in_50_cifar10_10percent_loss.pdf Graphic fil
 e (type pdf)
 <use ./results/baseline_pre_out_1_in_50_cifar10_10percent_loss.pdf>
 Package pdftex.def Info: ./results/baseline_pre_out_1_in_50_cifar10_10percent_l
-oss.pdf  used on input line 286.
+oss.pdf  used on input line 300.
 (pdftex.def)             Requested size: 312.9803pt x 208.66234pt.
-<./results/pPruneActNoNorm5_pre_out_7_in_7_cifar10_10percent_acc.pdf, id=36, 43
+<./results/pPruneActNoNorm5_pre_out_7_in_7_cifar10_10percent_acc.pdf, id=39, 43
 3.62pt x 289.08pt>
 File: ./results/pPruneActNoNorm5_pre_out_7_in_7_cifar10_10percent_acc.pdf Graph
 ic file (type pdf)
 <use ./results/pPruneActNoNorm5_pre_out_7_in_7_cifar10_10percent_acc.pdf>
 Package pdftex.def Info: ./results/pPruneActNoNorm5_pre_out_7_in_7_cifar10_10pe
-rcent_acc.pdf  used on input line 294.
+rcent_acc.pdf  used on input line 308.
 (pdftex.def)             Requested size: 312.9803pt x 208.66234pt.
-<./results/pPruneActNoNorm5_pre_out_7_in_7_cifar10_10percent_loss.pdf, id=37, 4
+<./results/pPruneActNoNorm5_pre_out_7_in_7_cifar10_10percent_loss.pdf, id=40, 4
 33.62pt x 289.08pt>
 File: ./results/pPruneActNoNorm5_pre_out_7_in_7_cifar10_10percent_loss.pdf Grap
 hic file (type pdf)
 <use ./results/pPruneActNoNorm5_pre_out_7_in_7_cifar10_10percent_loss.pdf>
 Package pdftex.def Info: ./results/pPruneActNoNorm5_pre_out_7_in_7_cifar10_10pe
-rcent_loss.pdf  used on input line 300.
+rcent_loss.pdf  used on input line 314.
 (pdftex.def)             Requested size: 312.9803pt x 208.66234pt.
-<./results/pPruneWeightNoNorm5_pre_out_7_in_7_cifar10_10percent_acc.pdf, id=38,
+<./results/pPruneWeightNoNorm5_pre_out_7_in_7_cifar10_10percent_acc.pdf, id=41,
  433.62pt x 289.08pt>
 File: ./results/pPruneWeightNoNorm5_pre_out_7_in_7_cifar10_10percent_acc.pdf Gr
 aphic file (type pdf)
 <use ./results/pPruneWeightNoNorm5_pre_out_7_in_7_cifar10_10percent_acc.pdf>
 Package pdftex.def Info: ./results/pPruneWeightNoNorm5_pre_out_7_in_7_cifar10_1
-0percent_acc.pdf  used on input line 308.
+0percent_acc.pdf  used on input line 322.
 (pdftex.def)             Requested size: 312.9803pt x 208.66234pt.
-<./results/pPruneWeightNoNorm5_pre_out_7_in_7_cifar10_10percent_loss.pdf, id=39
+<./results/pPruneWeightNoNorm5_pre_out_7_in_7_cifar10_10percent_loss.pdf, id=42
 , 433.62pt x 289.08pt>
 File: ./results/pPruneWeightNoNorm5_pre_out_7_in_7_cifar10_10percent_loss.pdf G
 raphic file (type pdf)
 <use ./results/pPruneWeightNoNorm5_pre_out_7_in_7_cifar10_10percent_loss.pdf>
 Package pdftex.def Info: ./results/pPruneWeightNoNorm5_pre_out_7_in_7_cifar10_1
-0percent_loss.pdf  used on input line 314.
+0percent_loss.pdf  used on input line 328.
 (pdftex.def)             Requested size: 312.9803pt x 208.66234pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 319--322
+Underfull \hbox (badness 10000) in paragraph at lines 333--336
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 319--322
+Underfull \hbox (badness 10000) in paragraph at lines 333--336
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 319--322
+Underfull \hbox (badness 10000) in paragraph at lines 333--336
 
  []
 
-[4]
-Underfull \vbox (badness 3271) has occurred while \output is active []
-
- [5 <./results/baseline_pre_out_1_in_50_cifar10_10percent_acc.pdf> <./results/b
-aseline_pre_out_1_in_50_cifar10_10percent_loss.pdf
+[5 <./results/baseline_pre_out_1_in_50_cifar10_10percent_acc.pdf> <./results/ba
+seline_pre_out_1_in_50_cifar10_10percent_loss.pdf
 
 pdfTeX warning: /usr/bin/pdflatex (file ./results/baseline_pre_out_1_in_50_cifa
 r10_10percent_loss.pdf): PDF inclusion: multiple pdfs with page group included 
@@ -1630,7 +1634,7 @@ pdfTeX warning: /usr/bin/pdflatex (file ./results/pPruneActNoNorm5_pre_out_7_in
 _7_cifar10_10percent_loss.pdf): PDF inclusion: multiple pdfs with page group in
 cluded in a single page
 >]
-Underfull \vbox (badness 10000) has occurred while \output is active []
+Underfull \vbox (badness 3271) has occurred while \output is active []
 
  [7 <./results/pPruneWeightNoNorm5_pre_out_7_in_7_cifar10_10percent_acc.pdf> <.
 /results/pPruneWeightNoNorm5_pre_out_7_in_7_cifar10_10percent_loss.pdf
@@ -1638,36 +1642,28 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 pdfTeX warning: /usr/bin/pdflatex (file ./results/pPruneWeightNoNorm5_pre_out_7
 _in_7_cifar10_10percent_loss.pdf): PDF inclusion: multiple pdfs with page group
  included in a single page
->]
-LaTeX Font Info:    Try loading font information for OMS+ptm on input line 383.
-
- (/usr/share/texlive/texmf-dist/tex/latex/psnfss/omsptm.fd
-File: omsptm.fd 
-)
-LaTeX Font Info:    Font shape `OMS/ptm/m/n' in size <10> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 383.
- (./report.bbl
-[8]) [9] (./report.aux) ) 
+>] (./report.bbl [8]) [9] (./report.aux) ) 
 Here is how much of TeX's memory you used:
  36104 strings out of 494847
  861498 string characters out of 6179081
- 1112206 words of memory out of 5000000
+ 1113206 words of memory out of 5000000
  38628 multiletter control sequences out of 15000+600000
  52679 words of font info for 144 fonts, out of 8000000 for 9000
  59 hyphenation exceptions out of 8191
  64i,12n,96p,1172b,609s stack positions out of 5000i,500n,10000p,200000b,80000s
-{/usr/share/texlive/texmf-dist/fonts/enc/dvips/base/8r
-.enc} </home/ssharma/.texlive2017/texmf-var/fonts/pk/ljfour/jknappen/ec/ectt100
-0.600pk></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pf
-b></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></us
-r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/shar
-e/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/share/texli
-ve/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texm
-f-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/share/texlive/texmf-dist/f
-onts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/t
-ype1/urw/times/utmb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/
-utmr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on report.pdf (9 pages, 204313 bytes).
+{/usr/share/texlive/texmf-dist/fonts/
+enc/dvips/base/8r.enc} </home/ssharma/.texlive2017/texmf-var/fonts/pk/ljfour/jk
+nappen/ec/ectt1000.600pk></usr/share/texlive/texmf-dist/fonts/type1/public/amsf
+onts/cm/cmbx10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/c
+m/cmex10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi
+10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb>
+</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/s
+hare/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/share/tex
+live/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/t
+exmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/share/texlive/texmf-dist/fonts
+/type1/urw/times/utmr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/time
+s/utmri8a.pfb>
+Output written on report.pdf (9 pages, 204591 bytes).
 PDF statistics:
  330 PDF objects out of 1000 (max. 8388607)
  93 compressed objects within 1 object stream
