@@ -15,30 +15,35 @@
 \@writefile{toc}{\contentsline {subsection}{\numberline {2.1}Masking Classifier Layers}{2}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {2.2}Masking Convolution Filters}{2}}
 \@writefile{toc}{\contentsline {subsection}{\numberline {2.3}Pruning Convolution Filters}{2}}
+\newlabel{eqNp}{{1}{2}}
 \citation{NIPS_learning_weights_pruning,prune_transfer_learning,prune_entropy,prune_slimming}
 \citation{prune_nisp}
 \citation{prune_thinet}
-\@writefile{loa}{\contentsline {algorithm}{\numberline {1}{\ignorespaces Iterative convolution filter pruning - single dataset\relax }}{3}}
+\@writefile{loa}{\contentsline {algorithm}{\numberline {1}{\ignorespaces Helper functions for iterative convolution filter pruning - single dataset\relax }}{3}}
 \providecommand*\caption@xref[2]{\@setref\relax\@undefined{#1}}
 \newlabel{FilterPruneBasic}{{1}{3}}
+\@writefile{loa}{\contentsline {algorithm}{\numberline {2}{\ignorespaces Computational functions for iterative convolution filter pruning - single dataset\relax }}{3}}
+\newlabel{FilterPruneComps}{{2}{3}}
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {2.3.1}Activation-Based Pruning}{3}}
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {2.3.2}Weight-Based Pruning}{3}}
-\citation{prune_for_architecture}
+\@writefile{loa}{\contentsline {algorithm}{\numberline {3}{\ignorespaces Driver functions for iterative convolution filter pruning - single dataset\relax }}{4}}
+\newlabel{FilterPruneDrivers}{{3}{4}}
+\@writefile{loa}{\contentsline {algorithm}{\numberline {4}{\ignorespaces Driver function for meta convolution filter pruning - multiple datasets\relax }}{4}}
+\newlabel{FilterPruneDriverMeta}{{4}{4}}
 \@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Baseline accuracy of VGG16 pre-trained on ImageNet. All layers were re-trained on 10\% of CIFAR-10 data ($4000$ training images, $1000$ validation images) for $50$ epochs.\relax }}{4}}
-\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Baseline loss of VGG16 pre-trained on ImageNet. All layers were re-trained on 10\% of CIFAR-10 data ($4000$ training images, $1000$ validation images) for $50$ epochs.\relax }}{4}}
-\@writefile{toc}{\contentsline {section}{\numberline {3}Goals}{4}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Baseline loss of VGG16 pre-trained on ImageNet. All layers were re-trained on 10\% of CIFAR-10 data ($4000$ training images, $1000$ validation images) for $50$ epochs.\relax }}{5}}
 \@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Accuracy of VGG16 pre-trained on ImageNet, re-trained with iterative activation-based filter pruning after every 7 epochs, for a total of 49 epochs. Re-trained was done on 10\% of CIFAR-10 data ($4000$ training images, $1000$ validation images).\relax }}{5}}
-\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Loss of VGG16 pre-trained on ImageNet, re-trained with iterative activation-based filter pruning after every 7 epochs, for a total of 49 epochs. Re-trained was done on 10\% of CIFAR-10 data ($4000$ training images, $1000$ validation images).\relax }}{5}}
+\citation{prune_for_architecture}
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Loss of VGG16 pre-trained on ImageNet, re-trained with iterative activation-based filter pruning after every 7 epochs, for a total of 49 epochs. Re-trained was done on 10\% of CIFAR-10 data ($4000$ training images, $1000$ validation images).\relax }}{6}}
+\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces Accuracy of VGG16 pre-trained on ImageNet, re-trained with iterative weight-based filter pruning after every 7 epochs, for a total of 49 epochs. Re-trained was done on 10\% of CIFAR-10 data ($4000$ training images, $1000$ validation images).\relax }}{6}}
+\@writefile{toc}{\contentsline {section}{\numberline {3}Goals}{6}}
+\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces Loss of VGG16 pre-trained on ImageNet, re-trained with iterative weight-based filter pruning after every 7 epochs, for a total of 49 epochs. Re-trained was done on 10\% of CIFAR-10 data ($4000$ training images, $1000$ validation images).\relax }}{7}}
+\@writefile{toc}{\contentsline {section}{\numberline {4}Methods}{7}}
+\@writefile{toc}{\contentsline {section}{\numberline {5}Nice-to-haves}{7}}
 \citation{NIPS_learning_weights_pruning}
 \citation{metalearning2}
 \bibstyle{apalike}
 \bibdata{references}
-\@writefile{loa}{\contentsline {algorithm}{\numberline {2}{\ignorespaces Meta-pruning for weights\relax }}{6}}
-\newlabel{alg1}{{2}{6}}
-\@writefile{loa}{\contentsline {algorithm}{\numberline {3}{\ignorespaces Meta-pruning for architecture\relax }}{6}}
-\newlabel{alg2}{{3}{6}}
-\@writefile{toc}{\contentsline {section}{\numberline {4}Methods}{6}}
-\@writefile{toc}{\contentsline {section}{\numberline {5}Nice-to-haves}{6}}
 \bibcite{metalearning1}{{1}{2017}{{Finn et~al.}}{{}}}
 \bibcite{jacobgilblog}{{2}{2017}{{Gildenblat}}{{}}}
 \bibcite{morphnet}{{3}{2018}{{Gordon et~al.}}{{}}}
@@ -47,6 +52,10 @@
 \bibcite{OBD}{{6}{1990}{{LeCun et~al.}}{{}}}
 \bibcite{metalearning2}{{7}{2017}{{Li et~al.}}{{}}}
 \bibcite{prune_slimming}{{8}{2017}{{Liu et~al.}}{{}}}
+\@writefile{loa}{\contentsline {algorithm}{\numberline {5}{\ignorespaces Meta-pruning for weights\relax }}{8}}
+\newlabel{alg1}{{5}{8}}
+\@writefile{loa}{\contentsline {algorithm}{\numberline {6}{\ignorespaces Meta-pruning for architecture\relax }}{8}}
+\newlabel{alg2}{{6}{8}}
 \bibcite{prune_for_architecture}{{9}{2019}{{Liu et~al.}}{{}}}
 \bibcite{prune_entropy}{{10}{2017}{{Luo and Wu}}{{}}}
 \bibcite{prune_thinet}{{11}{2017}{{Luo et~al.}}{{}}}
