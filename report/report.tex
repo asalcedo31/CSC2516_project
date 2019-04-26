@@ -94,14 +94,14 @@ It was argued by \citet{prune_transfer_learning} that pruning can also be applie
 
 The above points motivate the main idea proposed in this work: designing pruning methodologies that specifically target improved generalization of a given network, by leveraging multiple datasets during training. The goal is to optimize existing networks not only to be faster and smaller, but also to improve their ability to generalize. We first implement and study some simple and commonly-used pruning strategies and analyze their impact on network size, speed and accuracy. We then discuss and implement a simple meta-learning algorithm and study its performance. Finally, we combine the pruning strategies with the meta-learning algorithm to introduce a proof-of-concept ``meta-pruning'' methodology.
 
+\section{Methods}
 
-\section{A Study on Simple Pruning Algorithms}
+\subsection{A Study on Simple Pruning Algorithms}
 
-\subsection{Masking Classifier Layers}
+\subsubsection{Masking Classifier Layers}
 
-\subsection{Masking Convolution Filters}
 
-\subsection{Pruning Convolution Filters}
+\subsubsection{Pruning Convolution Filters}
 
 One method to prune convolutional layers is to reduce the number of output channels in each layer, which involves reducing the size of associated weight matrices. This impacts not only the convolution layer being pruned, but also the number of input channels in the next layer of the network. This approach was proposed by \cite{prune_transfer_learning}, and has since been implemented via open-source code provided by \cite{jacobgilblog}. However, this implementation only allows for pruning a single output channel at a time. We have implemented a version of this technique that allows pruning out several filters simultaneously, greatly improving the efficiency of aforementioned the code.
 
@@ -224,14 +224,51 @@ The results of both methods in comparison to the baseline (no pruning) are discu
 	\end{algorithmic}
 \end{algorithm}
 
+\subsection{Meta-Pruning with Multiple Datasets}
+
+\subsubsection{Meta-Pruning Classifier Layers}
+
+
+\subsubsection{Meta-Pruning Convolution Filters}
+
+
+\section{Related Work}
+
+
+\section{Results and Discussion}
+
+\subsection{A Study on Simple Pruning Algorithms}
+
+\subsubsection{Masking Classifier Layers}
+
+\subsubsection{Pruning Convolution Filters}
 
 \subsubsection{Activation-Based Pruning}
+
+
 Baseline time: 136m 58s
 Times: 19m 34s   19m 2s   17m 58s   16m 39s   16m 3s   15m 14s   13m 55s, total: 
 Filters: 4224.0   4020.0   3822.0   3637.0   3458.0   3294.0   3136.0
 \subsubsection{Weight-Based Pruning}
 Times: 19m 42s   19m 10s   18m 8s   16m 46s   16m 10s   15m 20s  14m 2s
 Filters: 
+
+\subsection{Meta-Pruning with Multiple Datasets}
+
+\subsubsection{Meta-Pruning Classifier Layers}
+
+
+\subsubsection{Meta-Pruning Convolution Filters}
+
+
+\section{Limitations}
+
+
+\section{Conclusions}
+
+
+\section{List of Contributions}
+
 
 \ \\ 
 \ \\
