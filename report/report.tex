@@ -33,7 +33,7 @@
 \usepackage{nicefrac}       % compact symbols for 1/2, etc.
 \usepackage{microtype}      % microtypography
 
-\title{Formatting instructions for NeurIPS 2018}
+\title{Network Pruning Based on Multiple Datasets for Improved Performance and Generalization}
 
 % The \author macro works with any number of authors. There are two commands
 % used to separate the names and addresses of multiple authors: \And and \AND.
@@ -94,20 +94,21 @@ It was argued by \citet{prune_transfer_learning} that pruning can also be applie
 
 The above points motivate the main idea proposed in this work: designing pruning methodologies that specifically target improved generalization of a given network, by leveraging multiple datasets during training. The goal is to optimize existing networks not only to be faster and smaller, but also to improve their ability to generalize. We first implement and study some simple and commonly-used pruning strategies and analyze their impact on network size, speed and accuracy. We then discuss and implement a simple meta-learning algorithm and study its performance. Finally, we combine the pruning strategies with the meta-learning algorithm to introduce a proof-of-concept ``meta-pruning'' methodology.
 
+\section{Formal Description}
 
-\section{A Study on Simple Pruning Algorithms}
+\subsection{A Survey on Simple Pruning Algorithms}
 
-\subsection{Masking Classifier Layers}
+\subsubsection{Masking of Classifier Layers Based on a Threshold} \label{maskClass}
 
-\subsection{Masking Convolution Filters}
+\subsubsection{Learned Masking of Classifier Layers} \label{maskClassL0}
 
-\subsection{Pruning Convolution Filters}
+\subsubsection{Pruning Convolution Filters} \label{PruneFilter}
 
 One method to prune convolutional layers is to reduce the number of output channels in each layer, which involves reducing the size of associated weight matrices. This impacts not only the convolution layer being pruned, but also the number of input channels in the next layer of the network. This approach was proposed by \cite{prune_transfer_learning}, and has since been implemented via open-source code provided by \cite{jacobgilblog}. However, this implementation only allows for pruning a single output channel at a time. We have implemented a version of this technique that allows pruning out several filters simultaneously, greatly improving the efficiency of aforementioned the code.
 
 Although a relatively sophisticated strategy for picking pruned channels was presented by \cite{prune_transfer_learning}, in our implementation we use two simple metrics to decide which channels are to be pruned: the 2-norm of the layer's activations, and the 2-norm of weights. In each case, pruning occurs after every $N_i$ epochs, until training is complete. The number of output channels to prune, $N_p$, is set via the hyperparameter $p$, which is a percentage of the total available parameters in that network, $N_\mathrm{total}$:
 \begin{align}
-	N_p = \mathrm{round} \left(\dfrac{p}{100}N_\mathrm{total}\right).
+	N_p = \mathrm{round} \left(\dfrac{p}{100}N_\mathrm{total}\right). \label{eqNp}
 \end{align}
 In the activation-based approach, the activations of each layer are accumulated over the $N_i$ epochs preceding a single pruning pass via the function \texttt{TrackConv2DNorms}. This is done as follows: at each training iteration, we compute the 2-norm of the activations of each layer, across all of the input data dimensions (function \texttt{ComputeConv2DActNorms}). The output of this is a vector whose size is the number of output channels of a particular layer, and one such vector is constructed for each convolution layer. These vectors represent the strength of the activations of each filter. Optionally, these vectors can be normalized to their maximum values to ensure that every set of $N_i$ epochs is equally represented.
 
@@ -119,7 +120,33 @@ The methodology described above is summarized in \algoref{FilterPruneBasic}.
 The results of both methods in comparison to the baseline (no pruning) are discussed below.
 
 \begin{algorithm}[t]
-	\caption{Iterative convolution filter pruning - single dataset} \label{FilterPruneBasic}
+	\caption{Helper functions for iterative convolution filter pruning - single dataset} \label{FilterPruneBasic}
+	\begin{algorithmic}[1]
+		\Function{ComputeConv2DWeightNorms}{${\mathrm{model}, \matr{n}_w}$}
+			\For {all $i$ in $\textit{convolution layers of }\mathrm{model}$}
+				\State $\widetilde{\matr{n}}_{w,i} \gets \textit{2-norm of weights of layer }i\textit{ across dims 1, 2, 3}$
+				\State $\widetilde{\matr{n}}_{w,i} \gets \widetilde{\matr{n}}_{w,i} / \max\abs{\widetilde{\matr{n}}_{w,i}} \textit{ (optional)}$
+				\State $\matr{n}_{w,i} \gets \textit{append }\widetilde{\matr{n}}_{w,i}$
+			\EndFor
+			\State \Return $\matr{n}_{w,i}$
+		\EndFunction
+		\\
+	%	
+		\Function{ComputeConv2DActNorms}{${\mathrm{model}, \matr{n}_a}$}
+			\For {all $i$ in $\textit{convolution layers of }\mathrm{model}$}
+				\State $\widetilde{\matr{n}}_{a,i} \gets \textit{2-norm of activations of layer }i\textit{ across dims 0, 2, 3}$
+				\State $\widetilde{\matr{n}}_{a,i} \gets \widetilde{\matr{n}}_{a,i} / \max\abs{\widetilde{\matr{n}}_{a,i}} \textit{ (optional)}$
+				\State $\matr{n}_{a,i} \gets \textit{append }\widetilde{\matr{n}}_{a,i}$
+			\EndFor
+			\State \Return $\matr{n}_{a,i}$
+		\EndFunction
+%
+	\end{algorithmic}
+\end{algorithm}
+
+
+\begin{algorithm}[t]
+	\caption{Computational functions for iterative convolution filter pruning - single dataset} \label{FilterPruneComps}
 	\begin{algorithmic}[1]
 		\Function{PruneConvLayers}{${\matr{l}_\mathrm{idx}, \matr{f}_\mathrm{idx}, \mathrm{model}}$}
 			\State $\matr{c}_\mathrm{idx} \gets \matr{l}_\mathrm{idx}^\mathrm{th}\textit{ conv layer of } \mathrm{model}$
@@ -130,74 +157,180 @@ The results of both methods in comparison to the baseline (no pruning) are discu
 			\State \Return $\mathrm{model}$
 		\EndFunction
 		\\
+		%		
+		\Function{PruneAllConv2DLayers}{${\matr{n}_{a}, \matr{n}_{w}, N_p, \mathrm{model}}$}
+		\For {all $i$ in $\textit{convolution layers of }\mathrm{model}$}
+			\If {\textit{activation-based pruning}}
+				\State $\matr{n}_{i} \gets \matr{n}_{a,i}$
+			\ElsIf {\textit{weight-based pruning}}
+				\State $\matr{n}_{i} \gets \matr{n}_{w,i}$
+			\EndIf
+			\State $\matr{f}_\mathrm{idx,i} \gets \textit{indices of bottom $N_p$ elements of }\matr{n}_{i}$
+			\State $\mathrm{model} \gets$ \Call{PruneConvLayers}{${i, \matr{f}_\mathrm{idx,i}, \mathrm{model}}$}
+		\EndFor
 %		
-	\Function{ComputeConv2DWeightNorms}{${\mathrm{model}, \matr{n}_w}$}
-		\For {all $i$ in $\textit{convolution layers of }\mathrm{model}$}
-			\State $\widetilde{\matr{n}}_w \gets \textit{2-norm of weights of layer }i\textit{ across dims 1, 2, 3}$
-			\State $\widetilde{\matr{n}}_{w,i} \gets \widetilde{\matr{n}}_{w,i} / \max\abs{\widetilde{\matr{n}}_{w,i}} \textit{ (optional)}$
-			\State $\matr{n}_{w,i} \gets \textit{append }\widetilde{\matr{n}}_{w,i}$
-		\EndFor
-		\State \Return $\matr{n}_{w,i}$
-	\EndFunction
-	\\
-%	
-	\Function{ComputeConv2DActNorms}{${\mathrm{model}, \matr{n}_a}$}
-		\For {all $i$ in $\textit{convolution layers of }\mathrm{model}$}
-			\State $\widetilde{\matr{n}}_a \gets \textit{2-norm of activations of layer }i\textit{ across dims 0, 2, 3}$
-			\State $\widetilde{\matr{n}}_{a,i} \gets \widetilde{\matr{n}}_{a,i} / \max\abs{\widetilde{\matr{n}}_{a,i}} \textit{ (optional)}$
-			\State $\matr{n}_{a,i} \gets \textit{append }\widetilde{\matr{n}}_{a,i}$
-		\EndFor
-		\State \Return $\matr{n}_{a,i}$
-	\EndFunction
-
-		\State $\theta \gets \textit{Random initialization}$
-		\For {all $D$ in collection of datasets $\mathcal{D}$}
-		\State $T \gets \textit{Sample tasks from dataset } D$
-		\For {all $i$ in $T$}
-		\State $G_i \gets \nabla_{\theta,i} \mathcal{L} \left(f_{\theta,i}\right)$
-		\State $\theta_i \gets \theta_i - \beta G_i$
-		\EndFor
-		\State $\theta \gets \textit{Pruned and fine-tuned } \theta$
-		\EndFor
+		\State \Return $\mathrm{model}$
+		\EndFunction
+		%
 	\end{algorithmic}
 \end{algorithm}
 
-\subsubsection{Activation-Based Pruning}
-Baseline time: 136m 58s
-Times: 19m 34s   19m 2s   17m 58s   16m 39s   16m 3s   15m 14s   13m 55s, total: 
-Filters: 4224.0   4020.0   3822.0   3637.0   3458.0   3294.0   3136.0
-\subsubsection{Weight-Based Pruning}
+\begin{algorithm}[t]
+	\caption{Driver functions for iterative convolution filter pruning - single dataset} \label{FilterPruneDrivers}
+	\begin{algorithmic}[1]
+			\Function{TrainModel}{$\mathrm{model}, \mathrm{input}, N_i, N_p$}
+			\For {all $i$ in $\mathrm{input}$}
+				\State $\matr{n}_{a} +\gets$ \Call{ComputeConv2DActNorms}{${\mathrm{model}, \matr{n}_{a}}$}
+				\State $\matr{n}_{w} +\gets$ \Call{ComputeConv2DWeightNorms}{${\mathrm{model}, \matr{n}_{w}}$}
+				\If {$i \% N_i == 0$}
+					\State $\mathrm{model} \gets$ \Call{PruneAllConv2DLayers}{${\matr{n}_{a}, \matr{n}_{w}, N_p, \mathrm{model}}$}
+					\State $\matr{n}_{a} \gets \textit{reset}$
+					\State $\matr{n}_{w} \gets \textit{reset}$
+				\EndIf
+			\EndFor
+			%		
+			\State \Return $\mathrm{model}$
+		\EndFunction\\
+%		
+		\State $\mathrm{model} \gets \textit{VGG16}$
+		\State $p \gets 5$
+		\State $N_p \gets \textit{value as per \eqref{eqNp}}$
+		\State $N_i \gets 7$
+		\State $\mathrm{input} \gets \textit{sample 10\% of data from CIFAR-10}$
+		\While {$i < 50$}
+			\State $\mathrm{model} \gets $ \Call{TrainModel}{$\mathrm{model}, \mathrm{input}, N_i, N_p$}
+		\EndWhile
+		%
+	\end{algorithmic}
+\end{algorithm}
+
+
+\begin{algorithm}[t]
+	\caption{Driver function for meta convolution filter pruning - multiple datasets} \label{FilterPruneDriverMeta}
+	\begin{algorithmic}[1]	
+		\State $\mathrm{model} \gets \textit{VGG16}$
+		\State $p \gets 5$
+		\State $N_p \gets \textit{value as per \eqref{eqNp}}$
+		\State $N_i \gets 7$
+		\State $\mathrm{datasets} \gets \textit{dataloaders for several different datasets, in this case $8$}$
+		\State $j \gets 0$
+		\While {$i < 50$}
+			\If {$i \% N_i == 0$}
+				\State $\mathrm{input} \gets \textit{sample 10\% of data from $\mathrm{dataset}$ }j$
+				\State $j \gets j + 1$
+			\EndIf
+			\State $\mathrm{model} \gets $ \Call{TrainModel}{$\mathrm{model}, \mathrm{input}, N_i, N_p$}
+		\EndWhile
+		%
+	\end{algorithmic}
+\end{algorithm}
+
+\subsection{Pruning with Multiple Datasets}
+
+\subsubsection{Intersection Pruning of Classifier Layers Based on a Threshold} \label{intersectPruneClass}
+
+
+\subsubsection{Meta-Pruning Classifier Layers} \label{metaPruneClass}
+
+
+\subsubsection{Intersection Pruning of Convolution Filters} \label{intersectPruneFilter}
+
+Our initial attempt at applying meta-pruning to convolution filters by using the L0 norm-based masking yielded significantly deteriorated training results. At the same time, the results obtained by weight- or activation-based pruning (rather than learned masking) were comparable to the baseline case of no pruning, discussed further in \secref{PruneFilterRes}. These observations motivated us to leverage multiple datasets in the sense of intersection pruning, as described earlier in \secref{intersectPruneClass}, to prune convolution layers. This method proceeds exactly as the description in \secref{PruneFilter}, except that after every $N_i$ epochs, the input data is resampled from a different dataset. The associated algorithm is summarized in \algoref{FilterPruneDriverMeta}.
+
+
+\section{Related Work}
+
+
+\section{Demonstration}
+
+The existing PyTorch implementation of VGG16 was used as the model to prune in all tests conducted in this work. The optimizer and other settings used were the same in all tests conducted, and can be found in accompanying code.
+
+\subsection{A Study on Simple Pruning Algorithms}
+
+In this study, the model was trained only on CIFAR-10 images. Due to limitations in computational resources available via Google Colab, only 2-10\% of the total available training images were used, to get results in a reasonable amount of time. Since the main point to be studied here is the performance of a pruned network compared to an unpruned network, we are only interested in the relative loss and accuracy. Thus, using the partial dataset is justified.
+
+\subsubsection{Masking of Classifier Layers Based on a Threshold}
+
+\subsubsection{Learned Masking of Classifier Layers}
+
+\subsubsection{Pruning Convolution Filters} \label{PruneFilterRes}
+
+Both activation-based and weight-based filter pruning approaches were studied. Since pruning is generally applied to fine-tune pre-trained network, the pre-trained version of VGG16 was used in this study. Pre-training was done on ImageNet, and the fine-tuning while pruning was done on CIFAR-10 images. In each case, pruning was performed after every $N_i = 7$ epochs. The percentage of filters pruned each time was $5$\%. Since the same settings were used in both methods, the number of filters pruned was the same in both cases. At the start, the model contained a total of $4224$ filters. After $49$ epochs, $3136$ filters survived, thus reducing the network size to $74$\% of its original size, not counting the classifier layers. Although the training time is usually not something that is critical to reduce, it is worth noting that training becomes faster as it proceeds due to the decreasing size of the network. The first $7$ epochs took $19$ minutes on average to train, while the last $7$ epochs took $14$ minutes on average. This is an indication of the expected improvement in network agility.
+
+Training and validation results for both pruning approaches are shown in \figref{pruneFiltersSingle}. The top row shows accuracy, while the bottom row shows loss. The first column on the left shows baseline results with no pruning. The second column shows activation-based filter pruning results, and the third column shows weight-based pruning results. It was found that normalization of the accumulated weight or activation vectors does not have a significant impact on the results, so we only show results for the case when the vectors are not normalized.
+
+The figures show that the both filter pruning approaches studied here decrease training accuracy compared to the baseline model by approximately $10$\% on average. However, the validation accuracy is only $3$--$5$\% lower than that obtained with the baseline model, on average. Furthermore, it is clear that the difference between training and validation accuracy in the baseline model is approximately $10$\%, while in the pruned networks, both training and validation performance are quite well balanced with respect to one another. This is an indicator that, as hypothesized, the pruned network has the potential to generalize better than the original network. The pruned network loss and accuracy are much less stable over epochs than the original model, which could perhaps be improved with more gradual pruning, or more sophisticated algorithms for choosing which filters to prune.
+%The second column shows results when the weight and activation vectors are \emph{not} normalized, while the second one shows results for when they \emph{are} normalized.
+\begin{figure}[!t]
+	\centering
+	\subfloat[][]
+	{\hspace{-11mm}
+		\includegraphics[width=6cm]{./results/baseline_pre_out_1_in_50_cifar10_10percent_acc.pdf}
+	}
+	\subfloat[][]
+	{\hspace{-7mm}
+		\includegraphics[width=6cm]{./results/pPruneActNoNorm5_pre_out_7_in_7_cifar10_10percent_acc.pdf}
+	}
+	\subfloat[][]
+	{\hspace{-7mm}
+		\includegraphics[width=6cm]{./results/pPruneWeightNoNorm5_pre_out_7_in_7_cifar10_10percent_acc.pdf}
+	}\\[-5mm]
+	\subfloat[][]
+	{\hspace{-11mm}
+		\includegraphics[width=6cm]{./results/baseline_pre_out_1_in_50_cifar10_10percent_loss.pdf}
+	}
+	\subfloat[][]
+	{\hspace{-7mm}
+		\includegraphics[width=6cm]{./results/pPruneActNoNorm5_pre_out_7_in_7_cifar10_10percent_loss.pdf}
+	}
+	\subfloat[][]
+	{\hspace{-7mm}
+		\includegraphics[width=6cm]{./results/pPruneWeightNoNorm5_pre_out_7_in_7_cifar10_10percent_loss.pdf}
+	}
+	\caption{Accuracy and loss of pre-trained VGG16 during fine-tuning. All layers were fine-tuned on 10\% of CIFAR-10 data ($4000$ training images, $1000$ validation images) for $50$ epochs. Top row: accuracy. Bottom row: loss. Left column: baseline model with no pruning. Middle column: activation-based pruning of $5$\% of all filters every $7$ epochs. Right column: weight-based pruning of $5$\% of all filters every $7$ epochs.}
+	\label{pruneFiltersSingle}
+\end{figure}
+
+
+%\begin{itemize}
+%	
+%	\item Activation-Based Pruning
+%	Baseline time: 136m 58s
+%	Times: 19m 34s   19m 2s   17m 58s   16m 39s   16m 3s   15m 14s   13m 55s, total: 
+%	Filters: 4224.0   4020.0   3822.0   3637.0   3458.0   3294.0   3136.0
+%	
+%	\item Weight-Based Pruning
+%	Times: 19m 42s   19m 10s   18m 8s   16m 46s   16m 10s   15m 20s  14m 2s
+%	Filters: 
+%	
+%\end{itemize}
+
+\subsection{Pruning with Multiple Datasets}
+
+\subsubsection{Intersection Pruning of Classifier Layers Based on a Threshold}
+
+
+\subsubsection{Meta-Pruning Classifier Layers}
+
+
+\subsubsection{Intersection Pruning of Convolution Filters}
+
+
+\section{Limitations}
+
+
+\section{Conclusions}
+
+
+\section{List of Contributions}
+
 
 \ \\ 
 \ \\
 \ \\
 **************** Dumping figures here for now ****************
 
-\begin{figure}[!t]
-	\centering
-	\includegraphics[width=11cm]{./results/baseline_pre_out_1_in_50_cifar10_10percent_acc.pdf}
-	\caption{Baseline accuracy of VGG16 pre-trained on ImageNet. All layers were re-trained on 10\% of CIFAR-10 data ($4000$ training images, $1000$ validation images) for $50$ epochs.}
-\end{figure}
 
-\begin{figure}[!t]
-	\centering
-	\includegraphics[width=11cm]{./results/baseline_pre_out_1_in_50_cifar10_10percent_loss.pdf}
-	\caption{Baseline loss of VGG16 pre-trained on ImageNet. All layers were re-trained on 10\% of CIFAR-10 data ($4000$ training images, $1000$ validation images) for $50$ epochs.}
-\end{figure}
-
-
-
-\begin{figure}[!t]
-	\centering
-	\includegraphics[width=11cm]{./results/pPruneActNoNorm5_pre_out_7_in_7_cifar10_10percent_acc.pdf}
-	\caption{Accuracy of VGG16 pre-trained on ImageNet, re-trained with iterative activation-based filter pruning after every 7 epochs, for a total of 49 epochs. Re-trained was done on 10\% of CIFAR-10 data ($4000$ training images, $1000$ validation images).}
-\end{figure}
-
-\begin{figure}[!t]
-	\centering
-	\includegraphics[width=11cm]{./results/pPruneActNoNorm5_pre_out_7_in_7_cifar10_10percent_loss.pdf}
-	\caption{Loss of VGG16 pre-trained on ImageNet, re-trained with iterative activation-based filter pruning after every 7 epochs, for a total of 49 epochs. Re-trained was done on 10\% of CIFAR-10 data ($4000$ training images, $1000$ validation images).}
-\end{figure}
 
 
 
