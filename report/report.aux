@@ -49,27 +49,20 @@
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {4.2.1}Intersection Pruning of Classifier Layers Based on a Threshold}{6}}
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {4.2.2}Meta-Pruning Classifier Layers}{6}}
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {4.2.3}Intersection Pruning of Convolution Filters}{6}}
-\@writefile{toc}{\contentsline {section}{\numberline {5}Limitations}{6}}
-\@writefile{toc}{\contentsline {section}{\numberline {6}Conclusions}{6}}
-\@writefile{toc}{\contentsline {section}{\numberline {7}List of Contributions}{6}}
-\citation{NIPS_learning_weights_pruning,prune_transfer_learning,prune_entropy,prune_slimming}
-\citation{prune_nisp}
-\citation{prune_thinet}
-\citation{prune_for_architecture}
-\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Accuracy and loss of pre-trained VGG16 during fine-tuning. All layers were fine-tuned on 10\% of CIFAR-10 data ($4000$ training images, $1000$ validation images) for $50$ epochs. Top row: accuracy. Bottom row: loss. Left column: baseline model with no pruning. Middle column: activation-based pruning of $5$\% of all filters every $7$ epochs. Right column: weight-based pruning of $5$\% of all filters every $7$ epochs.\relax }}{7}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces \textbf  {Filter pruning on a single dataset:} Accuracy and loss of pre-trained VGG16 during fine-tuning on $5$\% of CIFAR-10 data ($2000$ training images, $500$ validation images) for $50$ epochs. Top row: accuracy. Bottom row: loss. Left column: baseline model with no pruning. Middle column: activation-based pruning of $5$\% of all filters every $7$ epochs. Right column: weight-based pruning of $5$\% of all filters every $7$ epochs.\relax }}{7}}
 \newlabel{pruneFiltersSingle}{{2}{7}}
-\@writefile{toc}{\contentsline {section}{\numberline {8}Goals}{7}}
-\citation{NIPS_learning_weights_pruning}
-\citation{metalearning2}
-\@writefile{loa}{\contentsline {algorithm}{\numberline {5}{\ignorespaces Meta-pruning for weights\relax }}{8}}
-\newlabel{alg1}{{5}{8}}
-\@writefile{loa}{\contentsline {algorithm}{\numberline {6}{\ignorespaces Meta-pruning for architecture\relax }}{8}}
-\newlabel{alg2}{{6}{8}}
-\@writefile{toc}{\contentsline {section}{\numberline {9}Methods}{8}}
-\@writefile{toc}{\contentsline {section}{\numberline {10}Nice-to-haves}{8}}
 \bibstyle{apalike}
 \bibdata{references}
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces \textbf  {Iterative subsampling from CIFAR-10:} Accuracy and loss of pre-trained VGG16 during fine-tuning. Top row: accuracy. Bottom row: loss. Left column: baseline model with no pruning. Middle column: activation-based pruning of $5$\% of all filters every $7$ epochs. Right column: weight-based pruning of $5$\% of all filters every $7$ epochs.\relax }}{8}}
+\newlabel{pruneFiltersIntersectionSubsample}{{3}{8}}
+\@writefile{toc}{\contentsline {section}{\numberline {5}Limitations}{8}}
+\@writefile{toc}{\contentsline {section}{\numberline {6}Conclusions}{8}}
+\@writefile{toc}{\contentsline {section}{\numberline {7}List of Contributions}{8}}
 \bibcite{metalearning1}{{1}{2017}{{Finn et~al.}}{{}}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces \textbf  {Iterative sampling from multiple datasets:} Accuracy and loss of pre-trained VGG16 during fine-tuning. Top row: accuracy. Bottom row: loss. Left column: baseline model with no pruning. Right column: weight-based pruning of $5$\% of all filters every $6$ epochs.\relax }}{9}}
+\newlabel{pruneFiltersIntersectionMultiple}{{4}{9}}
+\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces Contributions of each author.\relax }}{9}}
+\newlabel{contr}{{1}{9}}
 \bibcite{jacobgilblog}{{2}{2017}{{Gildenblat}}{{}}}
 \bibcite{morphnet}{{3}{2018}{{Gordon et~al.}}{{}}}
 \bibcite{NIPS_learning_weights_pruning}{{4}{2015}{{Han et~al.}}{{}}}
