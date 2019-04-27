@@ -147,11 +147,87 @@ The above points motivate the main idea proposed in this work: designing pruning
 
 \section{Formal Description}
 
+In this section, we describe the two main phases of this work. First, we present a survey on simple pruning algorithms that have been presented in literature, to study their effect on network performance. Second, we propose combinations of pruning with the concept of meta-learning to leverage multiple datasets, to improve model generalizability while pruning.
+
 \subsection{A Survey on Simple Pruning Algorithms}
+
+Three simple approaches to pruning are reviewed below. The first two focus on pruning the classifier layers of the network, while the third involves pruning convolution layers.
 
 \subsubsection{Masking of Classifier Layers Based on a Threshold} \label{MaskClass}
 
+We pruned weights of the linear and / or convolution layers based on their absolute value, as proposed by \citet{NIPS_learning_weights_pruning}. To focus on the effects of pruning, we did not add an L2 penalty or drop-out layers, and instead only added a mask term in the forward pass of the linear and/or convolution layers. Every five epochs, we eliminated the weights with absolute values in the $p$ lowest proportion. The mask itself was not optimized, but the threshold was adjusted every five epochs. Results are shown in \figref{f1}.
+
+\begin{figure}[!t]
+	\centering
+	\subfloat[][]
+	{
+		\includegraphics[width=6cm]{./Figures/Fig1/A_baseline_10_accuracy.png}
+	}
+	\subfloat[][]
+	{
+		\includegraphics[width=6cm]{./Figures/Fig1/B_baseline_10_loss.png}
+	}\\
+	\subfloat[][]
+	{
+		\includegraphics[width=6cm]{./Figures/Fig1/C_baseline_T_accuracy.png}
+	}
+	\subfloat[][]
+	{
+		\includegraphics[width=6cm]{./Figures/Fig1/D_baseline_T_loss.png}
+	}\\
+	\subfloat[][]
+	{
+		\includegraphics[width=6cm]{./Figures/Fig1/E_ct0_T_accuracy.png}
+	}
+	\subfloat[][]
+	{
+		\includegraphics[width=6cm]{./Figures/Fig1/F_ct0_T_loss.png}
+	}\\
+	\subfloat[][]
+	{
+		\includegraphics[width=6cm]{./Figures/Fig1/G_ct0_T_accuracy1.png}
+	}
+	\subfloat[][]
+	{
+		\includegraphics[width=6cm]{./Figures/Fig1/H_ct0_T_loss1.png}
+	}
+	\caption{A. Baseline accuracy on CIFAR-10. B. Baseline loss on CIFAR-10.  C. Fine-tuning accuracy of VGG-16 on fashion MNIST after training on CIFAR-10. D. Fine-tuning loss of VGG-16 on fashion MNIST after training on CIFAR 10. E. Threshold pruning accuracy on CIFAR-10. F. Threshold pruning loss on CIFAR-10.  G. Fine-tuning accuracy of VGG16 on fashion MNIST after training on CIFAR-10 with threshold-pruning. H. Fine-tuning loss of VGG-16 on fashion MNIST after training on CIFAR-10 with threshold pruning.}
+	\label{f1}
+\end{figure}
+
 \subsubsection{Learned Masking of Classifier Layers} \label{MaskClassL0}
+
+\citet{L0norm} recently proposed a method to learn a pruning mask throughout training by applying a learnable L0 penalty. The L0 is a nearly binary mask based on the hard-concrete distribution that is applied to the inputs for each weight. Although the L0 mask is nearly binary, because of its probabilistic formulation it is possible to differentiate through it, unlike with a binary mask. The number of non-zero terms in the mask is then added to the loss, encouraging sparsity as training proceeds. We implemented the L0 penalty in both the classifier and convolution layers, but found that the performance on convolution layers was detrimental to the network. Thus for the L0-based pruning, we focus on the classifier layer. Results are shown in \figref{f2}.
+
+\begin{figure}[!t]
+	\centering
+	\subfloat[][]
+	{
+		\includegraphics[width=6cm]{./Figures/Fig2/A_ip_cifar_accuracy.png}
+	}
+	\subfloat[][]
+	{
+		\includegraphics[width=6cm]{./Figures/Fig2/B_ip_cifar_loss.png}
+	}\\
+	\subfloat[][]
+	{
+		\includegraphics[width=6cm]{./Figures/Fig2/C_ip_cifar_mask_accuracy.png}
+	}
+	\subfloat[][]
+	{
+		\includegraphics[width=6cm]{./Figures/Fig2/D_ip_cifar_mask_loss.png}
+	}\\
+	\subfloat[][]
+	{
+		\includegraphics[width=6cm]{./Figures/Fig2/E_ip_multiple_accuracy.png}
+	}
+	\subfloat[][]
+	{
+		\includegraphics[width=6cm]{./Figures/Fig2/F_ip_multiple_loss.png}
+	}
+	\caption{A. Iterative pruning accuracy subsampling CIFAR-10. B. Iterative pruning loss subsampling CIFAR-10. C. Iterative pruning accuracy subsampling CIFAR-10 re-initializing weights at each outer-iteration. D. Iterative pruning loss subsampling CIFAR-10 re-initializing weights at each outer-iteration. E. Iterative pruning accuracy subsampling multiple datasets. F. Iterative pruning loss subsampling  multiple datasets}
+	\label{f2}
+\end{figure}
 
 \subsubsection{Pruning Convolution Filters} \label{PruneFilter}
 
@@ -167,7 +243,7 @@ The new activation norm vectors computed at each iteration are added to the prev
 
 When pruning based on weights, the strategy is the same as above, except that rather than accumulating activations, we accumulate the 2-norms of the weight matrices themselves. The 2-norms are computed over the input channel dimension, and over the kernel of each filter (function \texttt{ComputeConv2DWeightNorms}). Again, this yields, for each layer, a vector containing 2-norms corresponding to the weights of each output channel. This can also be optionally normalized to the maximum value in each vector. Every $N_i$ epochs, these accumulated vectors are used to prune away the weakest $N_p$ filters.
 
-The methodology described above is summarized in \algoref{FilterPruneBasic}.
+The methodology described above is summarized in \algoref{FilterPruneBasic}, \algoref{FilterPruneComps} and \algoref{FilterPruneDrivers}.
 The results of both methods in comparison to the baseline (no pruning) are discussed below.
 
 \begin{algorithm}[t]
@@ -298,8 +374,8 @@ For pruning filter weights, this method proceeds similarly to the description in
 
 \subsubsection{Meta-Pruning} \label{metaPruneClass}
 
-The goal of this approach is to learn a masking matrix applied to weights, where the mask is learned based on a probability metric and decides which weights are to be pruned. \textcolor{red}{Adriana can add more if needed, here or elsewhere} 
-
+The goal of this approach is to learn a masking matrix applied to weights, where the mask is learned based on a probability metric and decides which weights are to be pruned.
+Through meta-learning, meta-parameters of a model can be learned, that allow to generalize to multiple datasets, and acheive high accuracy with minimal fine-tuning. We hypothesized that by meta-learning a sparsity mask, we could learn a general model achitecture that applies to a range of datsets. As meta-parameters must be learned through back-propagation, we implemented L0-meta-learning by subsampling a larger dataset in an outer loop, training a model for $N_i$ epochs in the inner loop, and updating the initial meta-parameters at the end of each set of inner iterations. We implemented updates using the Reptile algorithm proposed by \citet{reptile}.
 
 
 \section{Related Work}
@@ -322,9 +398,11 @@ The existing PyTorch implementation of VGG16 was used as the model to prune in a
 
 In this study, the model was trained only on CIFAR-10 images. Due to limitations in computational resources available via Google Colaboratory, only 2-10\% of the total available training images were used, to get results in a reasonable amount of time. Since the main point to be studied here is the performance of a pruned network compared to an unpruned network, we are only interested in the relative loss and accuracy. Thus, using the partial dataset is justified.
 
-\subsubsection{Masking of Classifier Layers Based on a Threshold}
+\subsubsection{Masking of Layers Based on a Threshold}
 
-\subsubsection{Learned Masking of Classifier Layers}
+We first assessed the impact of eliminating filters (based on their absolute value) on network performance and generalizability. We compared training and validation loss and accuracy of an untrained VGG-16 on CIFAR-10 classification. To better understand the impact of pruning in a transfer learning context, we then fine-tuned the model on FashionMNIST and assessed training and validation loss, and accuracy. For both experiments, we used a subset of $800$ training images and trained for $25$ epochs, setting weights with the $5$\% lowest absolute values to zero, every five epochs in the first two classifier layers.
+
+In the initial training on CIFAR-10, $15$\% of weights were eliminated after $25$ epochs. Even eliminating this modest amount of weights reduced the discrepancy between the training and validation loss throughout training, suggesting a slight generalization advantage. The impact of final validation accuracy was modest however, and only differed by $<5$\%.   Surprisingly, threshold pruning on one dataset did not accelerate learning in a second dataset indicating little generalizability benefit for transfer learning. Threshold pruning of convolution weights performed extremely poorly under the same experimental conditions, never achieving $>15$\% training accuracy. Eliminating weights based on their absolute value from convultion layers may disrupt the 2D spatial relationships that weights in convolution layers learn throughout training, as well as the input and output channels. Threshold pruning may then work well for fully connected layers with ample redundancy, but may disrupt the flow of spatial information throughout a convolution network. Pruning filters, as discussed above, may be a more effective way to shrink convolutional layers.
 
 \subsubsection{Pruning Convolution Filters} \label{PruneFilterRes}
 
@@ -366,12 +444,63 @@ The figures show that both filter pruning approaches studied here maintain train
 
 
 \subsection{Pruning with Multiple Datasets}
+In this section we present and discuss the results pertaining to the combination of pruning algorithms with the idea of learning from multiple datasets for generalization.
 
 \subsubsection{Intersection Pruning of Classifier Layers Based on a Threshold}
+
+We next assessed the efficacy of iterative threshold pruning of classifier layers. We conducted the following experiments:
+\begin{itemize}
+	\item The first study involved training on a fixed subset of $800$ images from CIFAR-10 and training VGG-16 (pre-trained on ImageNet) for a total of $70$ epochs on that data subset. The weights with the $5$\% lowest absolute values in the first two classifier layers were set to zero, and the other weights continued training.
+	\item The second study involved drawing a different $800$-image subset from CIFAR-10 $10$ times and training a pre-trained VGG-16 for $7$ epochs on that dataset. The weights with the $5$\% lowest absolute values in the first two classifier layers were set to zero. Non-zero weights were then randomly re-initialized but the pruned weights remained zero for the remainer of training.
+	\item Third, we assessed performance when drawing a different $800$-image dataset from one of $6$ datasets: CIFAR-10, CIFAR-100, MNIST, KMNIST, FashionMNIST and EMNIST. A total of $70$ epochs were run, sampling the datasets every $7$ epochs, while training a pre-trained VGG-16. The weights with the $5$\% lowest absolute values in the first two classifier layers were set to zero. The remaining weights continued training.
+\end{itemize}
+
+The main observations were the following:
+\begin{itemize}
+	\item Drawing dataset subsets from a single dataset and then applying threshold pruning led to comparable training and testing loss even when $>50$ of the weights are eliminated. The validation/training discrepancy was minimal, indicative of good generalization potential. As drawing multiple data subsets from a larger dataset is similar to training on a large dataset, these results suggest that periodic threshold pruning throughout training may be effective in a sufficiently large training set. The generalizability advantages could be seen most clearly when only the mask was retained across data subsets and weights were re-initialized. Validation accuracy remained near $50$\% while training accuracy dropped sharply. In line with the findings by \citet{prune_for_architecture}, these results suggest retained connections are more important to pruning than retained weights, and eliminating redundant weights can help reduce overfitting.
+	\item In contrast, subsampling from different datasets led to sharp peaks in both the training and validation losses and drops in the accuracy throughout training. The datasets were likely too different for the classifier to learn meaningful weights or connections from each data subset using this approach.
+	\item Together, these results demonstrate that intersection threshold pruning of classifier layers may be useful for improving generalization when applied to a large dataset, or closely-related data subsets.
+\end{itemize}
 
 
 \subsubsection{Meta-Pruning Classifier Layers}
 
+As a proof of concept, we first assess the efficacy of L0 pruning in an $800$-sample data subset of CIFAR-10, trained for $20$ epochs using a pre-trained VGG16. Consistent with previous work, this effectively reduced the number of floating point operations while maintaining comparable accuracy to the baseline, as shown in \figref{f3}. However, we were unable to use this approach to train VGG16 from scratch, since the losses did not decrease, likely because the gradients were too unstable. 
+Consistent with these findings, meta-pruning was ineffective for learning initial weights and L0 masks. Using $800$ image data subsets from CIFAR-10 for each of $20$ outer iterations, and training for $10$ epochs, did not reduce the final loss, the final number of floating point operations, or increase the final accuracy throughout training. The fluctuating trajectories suggest that learning was unstable, likely because the loss surface was very poorly conditioned. Using such small data-subsets likely gave a very weak gradient signal during the outer update and learning was unable to make meaningful progress. Larger data-subsets could increase the gradient signal, if more computational resources were available. Averaging the gradient signals or applying a momentum term could also help stabilize them.  Additionally, Reptile approximates the gradient updates using the difference between the final inner loop parameters and the outer loop parameters. Computing these more precisely, such as with MAML, may be necessary for meta-learning-based pruning architectures. 
+
+\begin{figure}[!t]
+	\centering
+	\subfloat[][]
+	{
+		\includegraphics[width=6cm]{./Figures/Fig3/A_baseline_10_PT_accuracy.png}
+	}
+	\subfloat[][]
+	{
+		\includegraphics[width=6cm]{./Figures/Fig3/B_baseline_10_PT_loss.png}
+	}\\
+	\subfloat[][]
+	{
+		\includegraphics[width=6cm]{./Figures/Fig3/C_l0_weight_pruning_accuracy.pdf}
+	}
+	\subfloat[][]
+	{
+		\includegraphics[width=6cm]{./Figures/Fig3/D_l0_weight_pruning_loss.pdf}
+	}\\
+	\subfloat[][]
+	{
+		\includegraphics[width=6cm]{./Figures/Fig3/E_l0_weight_pruning_flop.pdf}
+	}
+	\subfloat[][]
+	{
+		\includegraphics[width=6cm]{./Figures/Fig3/F_meta_pruning_02_800final_accuracy.pdf}
+	}\\
+	\subfloat[][]
+	{
+		\includegraphics[width=6cm]{./Figures/Fig3/G_meta_pruning_02_800initial_flops.pdf}
+	}
+	\caption{A. Baseline accuracy on CIFAR-10 with pre-training. B. Baseline loss on CIFAR-10 with pre-training.  C. Accuracy on CIFAR-10 with pre-training and L0 regularization. D.  loss on CIFAR-10 with pre-training and L0 regularization. E.  expected number of floating point operations in the classifier for CIFAR-10 with pre-training and L0 regularization. F. Final meta-pruning accuracy with L0 regularisation on CIFAR-10. G. Final expected number of floating point operations in the classifier with L0 regularisation on CIFAR-10.}
+	\label{f3}
+\end{figure}
 
 \subsubsection{Intersection Pruning of Convolution Filters}
 
@@ -515,14 +644,11 @@ The work discussed in this paper is not in any way related to either authors' re
 		& REPTILE meta-learning & \\[2mm]
 		& Wrote the related work section & Typesetting in \LaTeX \\[2mm]
 		& Editing & Editing \\[2mm]
-		Overall & $\sim 70$\% of total work done in this project & $\sim 30$\% of total work done in this project \\
+		Overall & $\sim 60$\% of total work done in this project & $\sim 40$\% of total work done in this project \\
 		\bottomrule
 	\end{tabular}
 	\label{contr}
 \end{table}
-
-
-
 
 \subsubsection*{Acknowledgments}
 
