@@ -79,18 +79,14 @@
 \maketitle
 
 \begin{abstract}
-  The abstract paragraph should be indented \nicefrac{1}{2}~inch (3~picas) on
-  both the left- and right-hand margins. Use 10~point type, with a vertical
-  spacing (leading) of 11~points.  The word \textbf{Abstract} must be centered,
-  bold, and in point size 12. Two line spaces precede the abstract. The abstract
-  must be limited to one paragraph.
+  Neural networks are commonly designed to have extremely large numbers of trainable parameters to obtain accurate models for complex problems. Yet the actual number of parameters needed to describe the model may be significantly smaller than the initial choice. Pruning is a commonly used strategy to reduce the size of an existing network by removing parameters that are relatively less important. This reduces memory and time requirements when deploying the model. Pruning has also been shown to improve the ability of a model to generalize. In this work, we study two classes of simple methods to prune an existing model, and extend those methods in the context of generalization, by iteratively training on multiple related datasets, while pruning the model. We show that pruning does indeed yield smaller and sparser models without serious detriment to model accuracy, and that pruning does, to some extent, have a beneficial impact on the model's ability to generalize.
 \end{abstract}
 
 \section{Introduction}
 
 Modern neural networks tend to be immensely large with several millions of connections and weights. The memory and energy requirements for deploying such networks is significant, and constantly growing with the complexity of state-of-the-art networks. Although having a large number of trainable parameters is beneficial to network accuracy, it was shown by \citet{NIPS_learning_weights_pruning}, \citet{OBD} and \citet{OBS} that the impact of some parameters is negligible in comparison with others. Successful identification and removal (``pruning'') of such parameters would lead to smaller and faster networks, which in turn would significantly reduce the computational cost at test time. The goal of most pruning algorithms is to achieve computational advantages without an appreciable impact on accuracy. The importance and relevance of network pruning was recently highlighted via MorphNet, proposed by \citet{morphnet} at Google to optimize existing networks through pruning.
 
-It was argued by \citet{prune_transfer_learning} that pruning can also be applied in the context of transfer learning, for generalization of a trained network to related datasets. Improved ability of networks to generalize as a result of pruning was also achieved by \citet{prune_for_architecture}. However, these approaches target networks that have been trained on a single dataset. In contrast, the concept of learning the hyperparameters of a network by using multiple datasets, known as ``meta-learning", has also been proposed by \citet{metalearning1}. To the best of our knowledge, the meta-learning concept has not been applied in the context of network pruning.
+It was argued by \citet{prune_transfer_learning} that pruning can also be applied in the context of transfer learning, for generalization of a trained network to related datasets. Improved ability of networks to generalize as a result of pruning was also achieved by \citet{prune_for_architecture}. However, these approaches target networks that have been trained on a single dataset. In contrast, the concept of learning the hyperparameters of a network by using multiple datasets, known as ``meta-learning", has also been proposed by \citet{maml}. To the best of our knowledge, the meta-learning concept has not been applied in the context of network pruning.
 
 The above points motivate the main idea proposed in this work: designing pruning methodologies that specifically target improved generalization of a given network, by leveraging multiple datasets during training. The goal is to optimize existing networks not only to be faster and smaller, but also to improve their ability to generalize. We first implement and study some simple and commonly-used pruning strategies and analyze their impact on network size, speed and accuracy. We then discuss and implement a simple meta-learning algorithm and study its performance. Finally, we combine the pruning strategies with the meta-learning algorithm to introduce a proof-of-concept ``meta-pruning'' methodology. The general outline and structure of this paper are summarized in \figref{summaryFig}.
 
@@ -153,9 +149,9 @@ The above points motivate the main idea proposed in this work: designing pruning
 
 \subsection{A Survey on Simple Pruning Algorithms}
 
-\subsubsection{Masking of Classifier Layers Based on a Threshold} \label{maskClass}
+\subsubsection{Masking of Classifier Layers Based on a Threshold} \label{MaskClass}
 
-\subsubsection{Learned Masking of Classifier Layers} \label{maskClassL0}
+\subsubsection{Learned Masking of Classifier Layers} \label{MaskClassL0}
 
 \subsubsection{Pruning Convolution Filters} \label{PruneFilter}
 
@@ -282,32 +278,41 @@ The results of both methods in comparison to the baseline (no pruning) are discu
 
 \subsection{Pruning with Multiple Datasets}
 
-In this section, the goal is to study two possible techniques to train a network based on samples from multiple similar datasets, rather than a single one, to promote generalization of the network. Either technique can be applied either by training the network from scratch, based on multiple datasets, or by fine-tuning a network that was previously trained on a single dataset. Since transfer learning and pruning are both generally handled as a post-processing step of an existing trained network, we will focus on the latter approach. The two techniques we consider for training on multiple datasets are:
-\begin{itemize}
-	\item \textbf{Intersection Pruning:} In this approach, after every $N_i$ epochs, the pruning step is accompanied by resampling data from a different but related dataset. Thus, every successive set of $N_i$ epochs corresponds to a different dataset. Our hypothesis is that as the network gets pruned, the filters that are eliminated are the ones that are least important to that dataset. Thus, at the end of training, we expect that the surviving weights are the ones that are important for the intersection of all datasets.
-	\item \textbf{Meta-Pruning:} The goal of this approach is to learn a masking matrix applied to weights, where the mask is learned based on a probability metric and decides which weights are to be pruned. \textcolor{red}{Adriana can add more if needed, here or elsewhere} 
-\end{itemize}
+In this section, the goal is to study two possible techniques to train a network based on samples from multiple similar datasets, rather than a single one, to promote generalization of the network. Either technique can be applied either by training the network from scratch, based on multiple datasets, or by fine-tuning a network that was previously trained on a single dataset. Since transfer learning and pruning are both generally handled as a post-processing step of an existing trained network, we will focus on the latter approach. 
+
+The two techniques we consider for training on multiple datasets are described below.
+%
 The goals of the methods proposed in this section are twofold:
 \begin{enumerate}
 	\item To study whether learning by sampling multiple datasets, or subsampling the same dataset multiple times throughout the fine-tuning phase, improve the ability of the network to generalize, and
 	\item To study the effects of intersection pruning on fine-tuning the network on multiple datasets, or subsamples of the same dataset. Furthermore, to study whether pruning has an effect on how the network generalizes.
 \end{enumerate}
 
-\subsubsection{Intersection Pruning of Classifier Layers Based on a Threshold} \label{intersectPruneClass}
+\subsubsection{Intersection Pruning} \label{intersectPruneClass} \label{intersectPruneFilter}
 
+In this approach, after every $N_i$ epochs, the pruning step is accompanied by resampling data from a different but related dataset. Thus, every successive set of $N_i$ epochs corresponds to a different dataset. Our hypothesis is that as the network gets pruned, the filters that are eliminated are the ones that are least important to that dataset. Thus, at the end of training, we expect that the surviving weights are the ones that are important for the intersection of all datasets.
 
-\subsubsection{Meta-Pruning Classifier Layers} \label{metaPruneClass}
+We apply this idea both to masking classifier layers, as well as pruning the filters of convolution layers.
+For threshold masking of classifier weights, this method proceeds similarly to the description in \secref{MaskClass}.
+For pruning filter weights, this method proceeds similarly to the description in \secref{PruneFilter}. However, in both cases the exception is that after every $N_i$ epochs, the input data is resampled from a different dataset. The associated algorithm for filter pruning (also applicable to classifier threshold masking) is summarized in \algoref{FilterPruneDriverMeta}.
 
+\subsubsection{Meta-Pruning} \label{metaPruneClass}
 
-\subsubsection{Intersection Pruning of Convolution Filters} \label{intersectPruneFilter}
-
-Our initial attempt at applying meta-pruning to convolution filters by using the L0 norm-based masking yielded significantly deteriorated training results. At the same time, the results obtained by weight- or activation-based pruning (rather than learned masking) were comparable to the baseline case of no pruning, discussed further in \secref{PruneFilterRes}. These observations motivated us to leverage multiple datasets in the sense of intersection pruning, to prune convolution layers. This method proceeds exactly as the description in \secref{PruneFilter}, except that after every $N_i$ epochs, the input data is resampled from a different dataset. The associated algorithm is summarized in \algoref{FilterPruneDriverMeta}.
-
+The goal of this approach is to learn a masking matrix applied to weights, where the mask is learned based on a probability metric and decides which weights are to be pruned. \textcolor{red}{Adriana can add more if needed, here or elsewhere} 
 
 
 
 \section{Related Work}
 
+A wide variety of pruning approaches have been developed to improve network generalization and reduce computational cost while preserving accuracy. Pruning was first attempted by \citet{OBD} with Optimal Brain Damage. They proposed removing weights based on their impact on the training error, which they calculate using the diagonal second derivatives of the loss. Removing off-diagonal weights was later shown, by \citet{OBS}, to allow for more extensive pruning (up to $90$\% weight reduction) with negligible impacts on accuracy. However, computing the Hessian is usually computationally infeasible for modern deep neural networks, although these networks can show extensive redundancy in weights according to \citet{pred}.
+
+The majority of modern pruning algorithms build on these ideas and prune by estimating the impact on loss of weights, units, or filters in more computationally efficient ways. \citet{NIPS_learning_weights_pruning} achieved this by imposing an L2 penalty, and removing weights below an arbitrary cutoff, and re-training weights iteratively. Although the majority of weights occur in the fully connected layers of a CNN, pruning CNN filters rather than weights can be more effective at reducing model training time and size. \citet{prune_transfer_learning} estimate the importance of units using a Taylor series approximation of the derivative of the loss without the unit in question. They show this can be approximated by the gradient of the loss with respect to that unit. In our work, we use the approach of \citet{NIPS_learning_weights_pruning} (which we refer to as threshold pruning) to mask out weights, and extend the concept to filters. We also investigate whether threshold pruning can be applied periodically during training instead of on a fully trained network to improve the resulting network’s generalizability.
+
+There have been limited efforts on pruning during training, rather than as a post-processing step after training. This is a difficult task because of the intractability of differentiating through binary functions. One method by \citet{L0norm} provides a way to transform the discrete problem of masking the weights of a network into a continuous problem, allowing computation of derivatives. This mask can then be applied to network layers to sparsify the weight matrices, and has been implemented in this work. We have further extended this idea in the context of learning from multiple datasets.
+
+There has also been an effort by \citet{morphnet} to automate the process of optimizing and pruning a network by iteratively shrinking and expanding it, to remove parameters that are less important to the problem at hand. However, they do not leverage multiple datasets, but show great promise in making networks faster and smaller without hurting accuracy.
+
+Our motivation to leverage multiple datasets to develop ``meta-pruning'' approaches was derived from previous works in meta-learning. One such approach was MAML by \citet{maml}, where the initial weights of a network are learned in an outer iteration over consecutive training runs. However, this approach requires invasively altering the way gradients are computed within the model being optimized, and is not easy to implement given an existing model. A simpler approach, Reptile, was proposed by \citet{reptile} to learn the initial weights of a network based on a finite difference-type approximation of the gradients of that layer. We have also implemented this, and extended it in the context of network pruning by combining it with the work of \citet{L0norm}.
 
 \section{Demonstration}
 
@@ -328,10 +333,7 @@ Both activation-based and weight-based filter pruning approaches were studied. S
 Training and validation results for both pruning approaches are shown in \figref{pruneFiltersSingle}. The top row shows accuracy, while the bottom row shows loss. The first column on the left shows baseline results with no pruning. The second column shows activation-based filter pruning results, and the third column shows weight-based pruning results. It was found that normalization of the accumulated weight or activation vectors does not have a significant impact on the results, so we only show results for the case when the vectors are not normalized.
 
 The figures show that both filter pruning approaches studied here maintain training accuracy compared to the baseline model, despite the $74$\% reduction in network size. The validation accuracy, on average, is not only similar to that of the baseline, but is slightly more stable across epochs. It is clear that in all cases, there is a difference between training and validation accuracy of approximately at least $10$\% on average. However, towards the end of $50$ epochs, the difference between training and validation accuracy in the baseline is noticeably higher (about $15$\%) than in the pruned models (still about $10$\%), which reinforces the idea that pruned networks may generalize better, as hypothesized. It is confirmed that the pruned network performs at least as well as the original network, but with significantly fewer weights, which also reinforces the importance and usefulness of pruning. It is also important to note that in all curves, the performance on validation in consistently lower than on the training data, which motivates the need to develop ways for the model to generalize better. The fluctuations in all curves is most likely because a relatively small training set ($2000$ images) was used due to limited computational resources available through Google Colaboratory.
-%As with any 
-%The second column shows results when the weight and activation vectors are \emph{not} normalized, while the second one shows results for when they \emph{are} normalized.
 %
-% CHANGE THIS IMAGES _ NEED TO BE UPDATED
 \begin{figure}[!t]
 	\centering
 	\subfloat[][]
@@ -363,19 +365,6 @@ The figures show that both filter pruning approaches studied here maintain train
 \end{figure}
 
 
-%\begin{itemize}
-%	
-%	\item Activation-Based Pruning
-%	Baseline time: 136m 58s
-%	Times: 19m 34s   19m 2s   17m 58s   16m 39s   16m 3s   15m 14s   13m 55s, total: 
-%	Filters: 4224.0   4020.0   3822.0   3637.0   3458.0   3294.0   3136.0
-%	
-%	\item Weight-Based Pruning
-%	Times: 19m 42s   19m 10s   18m 8s   16m 46s   16m 10s   15m 20s  14m 2s
-%	Filters: 
-%	
-%\end{itemize}
-
 \subsection{Pruning with Multiple Datasets}
 
 \subsubsection{Intersection Pruning of Classifier Layers Based on a Threshold}
@@ -388,13 +377,15 @@ The figures show that both filter pruning approaches studied here maintain train
 
 The following two studies were conducted:
 \begin{itemize}
-	\item \textbf{Iterative subsampling from the same dataset}: Training was performed on CIFAR-10, and $10$\% of the available data ($4000$ images) was resampled with replacement after every $N_i = 7$ epochs.
+	\item \textbf{Iterative subsampling from the same dataset}: In this study, training was performed on CIFAR-10, and $10$\% of the available data ($4000$ images) was resampled with replacement after every $N_i = 7$ epochs.
 	This study is meant to be a toy example of the more realistic case when several similar datasets are available, along with the computational resources required to use larger numbers of training samples at each iteration.
 	$5$\% of the network's convolutional filters were pruned every $N_i = 7$ epochs, based on the un-normalized 2-norms of the layers' weight matrices as well as their activations, as described above. This was compared to the baseline case of training the network in the same way, but without pruning. The results are shown in \figref{pruneFiltersIntersectionSubsample}.
 	
 	Unlike the results seen in \secref{PruneFilterRes}, the figures show that both filter pruning approaches studied here decrease training accuracy compared to the baseline model by approximately $10$\% on average. However, the validation accuracy is only $\sim 3$\% lower than that obtained with the baseline model, on average, but with $74$\% of the original network's filters. Although a larger proportion of the total CIFAR-10 dataset is represented during training, due to iterative subsampling, there is still a significant difference between training and validation accuracy in the baseline model (approximately $10$\%). However, the main result of this study is that in the pruned networks, performance on both training and validation data are very well balanced with respect to one another. This is a clear indicator that, as hypothesized, the pruned network shows better potential to generalize well, compared to the original network. The pruned network loss and accuracy are again much less stable over epochs than the original model, while the baseline model is much more stable. The fluctuations in the pruned model curves may be improved by pruning more gradually, for a larger number of epochs, and / or by using more sophisticated algorithms to pick which filters to prune.
+
+	To further stress-test the impact of pruning the model more aggressively, we repeated the above study, subsampling $5$\% of available training data from CIFAR-10, for a total of $150$ epochs. $5$\% of the total network filters were pruned every $10$ epochs. The total number of filters was reduced by $50$\%, from $4224$ to $2117$. As a baseline, the same study was performed without pruning. The purpose was to see how far we can push the reduction in the number of filter, and the results are shown in \figref{pruneFiltersIntersectionSubsample2}. The jumps in accuracy correspond to resampling the dataset every $10$ epochs. The training accuracy plateaus around $68$\% in the pruned model, and is again closely tracked by the validation accuracy. The baseline model provides on average $5$\% percent better accuracy than the pruned model, but its validation accuracy is still within $\sim 1\text{--}3$\% of the pruned model, which again indicates better generalization. Additionally, it is clear that the baseline model starts to overfit, as evidenced by the increasing difference between training and validation accuracy. However, this is not true for the pruned model; its validation accuracy consistently remains nearly as good as the training accuracy, further indicating better generalization. Furthermore, it took the pruned model $6.75$ minutes to train over final set of $10$\% epochs, while the baseline model took approximately $14.5$ minutes per $10$ epochs. Thus, it is to be expected that the pruned model will be at least twice as fast as the original upon deployment, in addition to potentially improved generalizability.
 	
-	\item \textbf{Iterative sampling from the multiple datasets}: training was performed by sampling $5$\% of available training data from six different datasets provided via \texttt{torchvision}.
+	\item \textbf{Iterative sampling from multiple datasets}: In this study, training was performed by sampling $5$\% of available training data from six different datasets provided via \texttt{torchvision}.
 	A different dataset was sampled every $N_i = 6$ epochs.
 	A total of 120 epochs were run, so that every dataset was sampled twice.
 	The six datasets used were CIFAR-10, CIFAR-100, MNIST, KMNIST, FashionMNIST and EMNIST.
@@ -444,6 +435,28 @@ The following two studies were conducted:
 	\centering
 	\subfloat[][]
 	{
+		\includegraphics[width=7cm]{./results/baseline_pre_out_15_in_10_cifar10_5percent_acc.pdf}
+	}
+	\subfloat[][]
+	{
+		\includegraphics[width=7cm]{./results/pPruneWeightNoNorm5_pre_out_15_in_10_cifar10_5percent_acc.pdf}
+	}\\[-5mm]
+	\subfloat[][]
+	{
+		\includegraphics[width=7cm]{./results/baseline_pre_out_15_in_10_cifar10_5percent_loss.pdf}
+	}
+	\subfloat[][]
+	{
+		\includegraphics[width=7cm]{./results/pPruneWeightNoNorm5_pre_out_15_in_10_cifar10_5percent_loss.pdf}
+	}
+	\caption{\textbf{Iterative subsampling from CIFAR-10:} Accuracy and loss of pre-trained VGG16 during fine-tuning. Top row: accuracy. Bottom row: loss. Left column: baseline model with no pruning. Right column: weight-based pruning of $5$\% of all filters every $10$ epochs.}
+	\label{pruneFiltersIntersectionSubsample2}
+\end{figure}
+
+\begin{figure}[!t]
+	\centering
+	\subfloat[][]
+	{
 		\includegraphics[width=7cm]{./results/baseline_pre_out_12_in_10_multiple_5percent_acc.pdf}
 	}
 	\subfloat[][]
@@ -465,9 +478,19 @@ The following two studies were conducted:
 
 \section{Limitations}
 
+Some of the major limitations of the proposed methodologies are:
+\begin{itemize}
+	\item Relatively simple metrics are used to determine what to prune, and the gradients of the loss with respect to network parameters have not been taken into account, unlike existing works in literature.
+	\item The process of repeatedly sampling from different datasets would work much better if there was a larger overlap between their image categories, and were more closely related. Since we only used datasets easily available via \texttt{torchvision}, the choices were limited. However, even if the datasets were more closely related, they could also just be combined into one large dataset, so the benefit of resampling seems quite limited.
+	\item In threshold masking, one limitation is that weights that are masked once can not come back. We attempted to alleviate this via meta-pruning, but it did not seem to work very well.
+	\item We have not thoroughly quantified network performance with pruning in terms of memory and power consumption.
+	\item The only GPUs we had access to were through Google Colaboratory, which limited the amount of training data we could use within the time constraints.
+	\item We have only explored VGG16 - it would be interesting to study pruning on other networks, particularly those that rely on dropout.
+\end{itemize}
 
 \section{Conclusions}
 
+In this work, we have surveyed simple techniques to prune large neural networks, using VGG16 as our test model. Due to the potential for pruning to improve network generalization, we have also attempted to combine pruning with the concept of meta-learning in two ways: one is by iteratively sampling from different but related datasets (``intersection pruning''), and the other is by learning mask matrices which are applied to classifier layers (``meta-pruning''). We found that pruning does indeed allow a significant reduction in network size with a corresponding test-time speed-up. However, in the case of intersection pruning of filter weights, this comes with up to $10$\% reduction in training accuracy, but without a significant reduction in validation accuracy. This indicates potentially better generalization properties of the pruned model. It was also observed that when sampling from multiple datasets, pruning filters has a very minor effect on both training and validation accuracy.
 
 \section{List of Contributions}
 
@@ -501,363 +524,9 @@ The work discussed in this paper is not in any way related to either authors' re
 
 
 
-%\ \\ 
-%\ \\
-%\ \\
-
-%**************** Text below is copied from proposal ****************
-%
-%A variety of pruning algorithms have been proposed, many of which apply to convolutional neural networks. Some remove individual weights (leading to sparse weight matrices) while others remove entire filters, channels or layers. Units may be removed based on many criteria, including their magnitude, their contribution to the final loss (approximated through their gradients), and information criteria such as entropy~\citet{NIPS_learning_weights_pruning, prune_transfer_learning, prune_entropy, prune_slimming}.  Pruning may be applied towards a human-defined architecture (e.g. removing a certain proportion of weights in each layer)~\citet{prune_nisp} or help determine the final architecture autonomously~\citet{prune_thinet}. 
-%
-%\section{Goals}
-%
-%
-%
-%
-%
-%After each dataset sample, only connections that survive pruning and thus contribute to the final loss will be retained.  At the beginning of each dataset sample, weights will be initialized with the value of the updated weights in the previous sample. We hypothesize that this approach will result in weights that are important for a broad set of related tasks. 
-%
-%It has been suggested~\citet{prune_for_architecture} that pruning can also improve algorithm efficiency by virtue of the resulting architecture, rather than just the resulting weights. Therefore, we will also assess a modified meta-pruning algorithm that only retains the architecture, and not the weights, across datasets:
-%
-%
-%
-%We hypothesize that this approach will result in architectures that are more generalizable and efficient than the full model. Comparing the two approaches in algorithms 1 and 2 will illuminate the relative contributions of the weights and the architecture to the value of pruning for generalizability. 
-%
-%\section{Methods}
-%
-%We will first select a relatively simple pruning algorithm that can be adapted to the meta-pruning approach described above, as a proof of concept. Since pruning studies to date have largely focused on convolutional neural networks, we will develop our algorithm in the context of image recognition, initially working with the CIFAR-100 data. For the initial model, we will use VGGNet due to its simple architecture and expand to ResNet if time allows. To assess our algorithms' baseline performance, we will use test images which have the same categories as the training images. We will then assess our algorithms' capacity to generalize using a test set that contains a distinct set of categories from the training set. We will use cross entropy loss and assess the algorithms' performance by comparing its classification accuracy to the accuracy of the full model, as well as a reduced model with the same number of connections but where connections are randomly dropped. We will also compare the training time, memory requirements, and the number of retained parameters to assess the algorithms' efficiency and quantify the amount of compression achieved.
-%
-%An important consideration in the proposed algorithms is the consequence of pruning to backpropagation. Particularly in algorithm 1, depending on the order in which operations are applied, special care must be taken to ensure that gradients are computed correctly for the pruned model, at each outer iteration. One way to circumvent the issue is to recompute gradients every time the model is updated via pruning. However, it may be possible to do this more intelligently by applying advanced techniques for gradients of discrete problems. This will be an area to explore, if time permits.
-%
-%\begin{algorithm}[t]
-%	\caption{Meta-pruning for weights} \label{alg1}
-%	\begin{algorithmic}[1]
-%		\State $\theta \gets \textit{Random initialization}$
-%		\For {all $D$ in collection of datasets $\mathcal{D}$}
-%		\State $T \gets \textit{Sample tasks from dataset } D$
-%		\For {all $i$ in $T$}
-%		\State $G_i \gets \nabla_{\theta,i} \mathcal{L} \left(f_{\theta,i}\right)$
-%		\State $\theta_i \gets \theta_i - \beta G_i$
-%		\EndFor
-%		\State $\theta \gets \textit{Pruned and fine-tuned } \theta$
-%		\EndFor
-%	\end{algorithmic}
-%\end{algorithm}
-%
-%\begin{algorithm}[t]
-%	\caption{Meta-pruning for architecture} \label{alg2}
-%	\begin{algorithmic}[1]
-%		%		\State $\theta \gets \textit{Random initialization}$
-%		\For {all $D$ in collection of datasets $\mathcal{D}$}
-%		\State $\theta \gets \textit{Random initialization}$
-%		\State $T \gets \textit{Sample tasks from dataset } D$
-%		\For {all $i$ in $T$}
-%		\State $G_i \gets \nabla_{\theta,i} \mathcal{L} \left(f_{\theta,i}\right)$
-%		\State $\theta_i \gets \theta_i - \beta G_i$
-%		\EndFor
-%		\State $\theta \gets \textit{Pruned } \theta$
-%		\EndFor
-%	\end{algorithmic}
-%\end{algorithm}
-%
-%\section{Nice-to-haves}
-%
-%There are several additional analyses we can incorporate if time allows:
-%
-%\begin{itemize}
-%	\item To ensure our results are not specific to a particular pruning method, we can test meta-pruning using several pruning algorithms that span a range of approaches.
-%	\item Explore how to modify the meta-pruning approach to preserve connections that are retained in most, but not all training sets.
-%	\item Leverage the meta-learning framework to learn how to prune~\citet{NIPS_learning_weights_pruning}.
-%	\item Explicitly incorporate transfer learning into the meta-learning framework by assessing loss on a pseudo-test validation set with different categories~\citet{metalearning2}.
-%	\item Apply meta-pruning to a more complex real-world dataset in a transfer learning context.
-%\end{itemize}
-
-
-%\section{Style}
-%
-%\subsection{Style}
-%
-%Papers to be submitted to NeurIPS 2018 must be prepared according to the
-%instructions presented here. Papers may only be up to eight pages long,
-%including figures. Additional pages \emph{containing only acknowledgments and/or
-%  cited references} are allowed. Papers that exceed eight pages of content
-%(ignoring references) will not be reviewed, or in any other way considered for
-%presentation at the conference.
-%
-%The margins in 2018 are the same as since 2007, which allow for $\sim$$15\%$
-%more words in the paper compared to earlier years.
-%
-%Authors are required to use the NeurIPS \LaTeX{} style files obtainable at the
-%NeurIPS website as indicated below. Please make sure you use the current files
-%and not previous versions. Tweaking the style files may be grounds for
-%rejection.
-%
-%\subsection{Retrieval of style files}
-%
-%The style files for NeurIPS and other conference information are available on
-%the World Wide Web at
-%\begin{center}
-%  \url{http://www.neurips.cc/}
-%\end{center}
-%The file \verb+neurips_2018.pdf+ contains these instructions and illustrates the
-%various formatting requirements your NeurIPS paper must satisfy.
-%
-%The only supported style file for NeurIPS 2018 is \verb+neurips_2018.sty+,
-%rewritten for \LaTeXe{}.  \textbf{Previous style files for \LaTeX{} 2.09,
-%  Microsoft Word, and RTF are no longer supported!}
-%
-%The \LaTeX{} style file contains three optional arguments: \verb+final+, which
-%creates a camera-ready copy, \verb+preprint+, which creates a preprint for
-%submission to, e.g., arXiv, and \verb+nonatbib+, which will not load the
-%\verb+natbib+ package for you in case of package clash.
-%
-%\paragraph{New preprint option for 2018}
-%If you wish to post a preprint of your work online, e.g., on arXiv, using the
-%NeurIPS style, please use the \verb+preprint+ option. This will create a
-%nonanonymized version of your work with the text ``Preprint. Work in progress.''
-%in the footer. This version may be distributed as you see fit. Please \textbf{do
-%  not} use the \verb+final+ option, which should \textbf{only} be used for
-%papers accepted to NeurIPS.
-%
-%At submission time, please omit the \verb+final+ and \verb+preprint+
-%options. This will anonymize your submission and add line numbers to aid
-%review. Please do \emph{not} refer to these line numbers in your paper as they
-%will be removed during generation of camera-ready copies.
-%
-%The file \verb+neurips_2018.tex+ may be used as a ``shell'' for writing your
-%paper. All you have to do is replace the author, title, abstract, and text of
-%the paper with your own.
-%
-%The formatting instructions contained in these style files are summarized in
-%Sections \ref{gen_inst}, \ref{headings}, and \ref{others} below.
-%
-%\section{General formatting instructions}
-%\label{gen_inst}
-%
-%The text must be confined within a rectangle 5.5~inches (33~picas) wide and
-%9~inches (54~picas) long. The left margin is 1.5~inch (9~picas).  Use 10~point
-%type with a vertical spacing (leading) of 11~points.  Times New Roman is the
-%preferred typeface throughout, and will be selected for you by default.
-%Paragraphs are separated by \nicefrac{1}{2}~line space (5.5 points), with no
-%indentation.
-%
-%The paper title should be 17~point, initial caps/lower case, bold, centered
-%between two horizontal rules. The top rule should be 4~points thick and the
-%bottom rule should be 1~point thick. Allow \nicefrac{1}{4}~inch space above and
-%below the title to rules. All pages should start at 1~inch (6~picas) from the
-%top of the page.
-%
-%For the final version, authors' names are set in boldface, and each name is
-%centered above the corresponding address. The lead author's name is to be listed
-%first (left-most), and the co-authors' names (if different address) are set to
-%follow. If there is only one co-author, list both author and co-author side by
-%side.
-%
-%Please pay special attention to the instructions in Section \ref{others}
-%regarding figures, tables, acknowledgments, and references.
-%
-%\section{Headings: first level}
-%\label{headings}
-%
-%All headings should be lower case (except for first word and proper nouns),
-%flush left, and bold.
-%
-%First-level headings should be in 12-point type.
-%
-%\subsection{Headings: second level}
-%
-%Second-level headings should be in 10-point type.
-%
-%\subsubsection{Headings: third level}
-%
-%Third-level headings should be in 10-point type.
-%
-%\paragraph{Paragraphs}
-%
-%There is also a \verb+\paragraph+ command available, which sets the heading in
-%bold, flush left, and inline with the text, with the heading followed by 1\,em
-%of space.
-%
-%\section{Citations, figures, tables, references}
-%\label{others}
-%
-%These instructions apply to everyone.
-%
-%\subsection{Citations within the text}
-%
-%The \verb+natbib+ package will be loaded for you by default.  Citations may be
-%author/year or numeric, as long as you maintain internal consistency.  As to the
-%format of the references themselves, any style is acceptable as long as it is
-%used consistently.
-%
-%The documentation for \verb+natbib+ may be found at
-%\begin{center}
-%  \url{http://mirrors.ctan.org/macros/latex/contrib/natbib/natnotes.pdf}
-%\end{center}
-%Of note is the command \verb+\citet+, which produces citations appropriate for
-%use in inline text.  For example,
-%\begin{verbatim}
-%   \citet{hasselmo} investigated\dots
-%\end{verbatim}
-%produces
-%\begin{quote}
-%  Hasselmo, et al.\ (1995) investigated\dots
-%\end{quote}
-%
-%If you wish to load the \verb+natbib+ package with options, you may add the
-%following before loading the \verb+neurips_2018+ package:
-%\begin{verbatim}
-%   \PassOptionsToPackage{options}{natbib}
-%\end{verbatim}
-%
-%If \verb+natbib+ clashes with another package you load, you can add the optional
-%argument \verb+nonatbib+ when loading the style file:
-%\begin{verbatim}
-%   \usepackage[nonatbib]{neurips_2018}
-%\end{verbatim}
-%
-%As submission is double blind, refer to your own published work in the third
-%person. That is, use ``In the previous work of Jones et al.\ [4],'' not ``In our
-%previous work [4].'' If you cite your other papers that are not widely available
-%(e.g., a journal paper under review), use anonymous author names in the
-%citation, e.g., an author of the form ``A.\ Anonymous.''
-%
-%\subsection{Footnotes}
-%
-%Footnotes should be used sparingly.  If you do require a footnote, indicate
-%footnotes with a number\footnote{Sample of the first footnote.} in the
-%text. Place the footnotes at the bottom of the page on which they appear.
-%Precede the footnote with a horizontal rule of 2~inches (12~picas).
-%
-%Note that footnotes are properly typeset \emph{after} punctuation
-%marks.\footnote{As in this example.}
-%
-%\subsection{Figures}
-%
-%\begin{figure}
-%  \centering
-%  \fbox{\rule[-.5cm]{0cm}{4cm} \rule[-.5cm]{4cm}{0cm}}
-%  \caption{Sample figure caption.}
-%\end{figure}
-%
-%All artwork must be neat, clean, and legible. Lines should be dark enough for
-%purposes of reproduction. The figure number and caption always appear after the
-%figure. Place one line space before the figure caption and one line space after
-%the figure. The figure caption should be lower case (except for first word and
-%proper nouns); figures are numbered consecutively.
-%
-%You may use color figures.  However, it is best for the figure captions and the
-%paper body to be legible if the paper is printed in either black/white or in
-%color.
-%
-%\subsection{Tables}
-%
-%All tables must be centered, neat, clean and legible.  The table number and
-%title always appear before the table.  See Table~\ref{sample-table}.
-%
-%Place one line space before the table title, one line space after the
-%table title, and one line space after the table. The table title must
-%be lower case (except for first word and proper nouns); tables are
-%numbered consecutively.
-%
-%Note that publication-quality tables \emph{do not contain vertical rules.} We
-%strongly suggest the use of the \verb+booktabs+ package, which allows for
-%typesetting high-quality, professional tables:
-%\begin{center}
-%  \url{https://www.ctan.org/pkg/booktabs}
-%\end{center}
-%This package was used to typeset Table~\ref{sample-table}.
-%
-%\begin{table}
-%  \caption{Sample table title}
-%  \label{sample-table}
-%  \centering
-%  \begin{tabular}{lll}
-%    \toprule
-%    \multicolumn{2}{c}{Part}                   \\
-%    \cmidrule(r){1-2}
-%    Name     & Description     & Size ($\mu$m) \\
-%    \midrule
-%    Dendrite & Input terminal  & $\sim$100     \\
-%    Axon     & Output terminal & $\sim$10      \\
-%    Soma     & Cell body       & up to $10^6$  \\
-%    \bottomrule
-%  \end{tabular}
-%\end{table}
-%
-%\section{Final instructions}
-%
-%Do not change any aspects of the formatting parameters in the style files.  In
-%particular, do not modify the width or length of the rectangle the text should
-%fit into, and do not change font sizes (except perhaps in the
-%\textbf{References} section; see below). Please note that pages should be
-%numbered.
-%
-%\section{Preparing PDF files}
-%
-%Please prepare submission files with paper size ``US Letter,'' and not, for
-%example, ``A4.''
-%
-%Fonts were the main cause of problems in the past years. Your PDF file must only
-%contain Type 1 or Embedded TrueType fonts. Here are a few instructions to
-%achieve this.
-%
-%\begin{itemize}
-%
-%\item You should directly generate PDF files using \verb+pdflatex+.
-%
-%\item You can check which fonts a PDF files uses.  In Acrobat Reader, select the
-%  menu Files$>$Document Properties$>$Fonts and select Show All Fonts. You can
-%  also use the program \verb+pdffonts+ which comes with \verb+xpdf+ and is
-%  available out-of-the-box on most Linux machines.
-%
-%\item The IEEE has recommendations for generating PDF files whose fonts are also
-%  acceptable for NeurIPS. Please see
-%  \url{http://www.emfield.org/icuwb2010/downloads/IEEE-PDF-SpecV32.pdf}
-%
-%\item \verb+xfig+ "patterned" shapes are implemented with bitmap fonts.  Use
-%  "solid" shapes instead.
-%
-%\item The \verb+\bbold+ package almost always uses bitmap fonts.  You should use
-%  the equivalent AMS Fonts:
-%\begin{verbatim}
-%   \usepackage{amsfonts}
-%\end{verbatim}
-%followed by, e.g., \verb+\mathbb{R}+, \verb+\mathbb{N}+, or \verb+\mathbb{C}+
-%for $\mathbb{R}$, $\mathbb{N}$ or $\mathbb{C}$.  You can also use the following
-%workaround for reals, natural and complex:
-%\begin{verbatim}
-%   \newcommand{\RR}{I\!\!R} %real numbers
-%   \newcommand{\Nat}{I\!\!N} %natural numbers
-%   \newcommand{\CC}{I\!\!\!\!C} %complex numbers
-%\end{verbatim}
-%Note that \verb+amsfonts+ is automatically loaded by the \verb+amssymb+ package.
-%
-%\end{itemize}
-%
-%If your file contains type 3 fonts or non embedded TrueType fonts, we will ask
-%you to fix it.
-%
-%\subsection{Margins in \LaTeX{}}
-%
-%Most of the margin problems come from figures positioned by hand using
-%\verb+\special+ or other commands. We suggest using the command
-%\verb+\includegraphics+ from the \verb+graphicx+ package. Always specify the
-%figure width as a multiple of the line width as in the example below:
-%\begin{verbatim}
-%   \usepackage[pdftex]{graphicx} ...
-%   \includegraphics[width=0.8\linewidth]{myfile.pdf}
-%\end{verbatim}
-%See Section 4.4 in the graphics bundle documentation
-%(\url{http://mirrors.ctan.org/macros/latex/required/graphics/grfguide.pdf})
-%
-%A number of width problems arise when \LaTeX{} cannot properly hyphenate a
-%line. Please give LaTeX hyphenation hints using the \verb+\-+ command when
-%necessary.
-
 \subsubsection*{Acknowledgments}
 
-We would like to acknowledge the instructors (Roger Grosse and Jimmy Ba) and TAs of CSC2516 for providing a valuable learning experience through this course.
+We would like to thank the instructors (Roger Grosse and Jimmy Ba) and TAs of CSC2516 for providing a valuable learning experience through this course.
 
 \bibliographystyle{apalike} % IEEEtran is only available via some tex installations. Can change to any other, e.g. "plain".
 \bibliography{references}

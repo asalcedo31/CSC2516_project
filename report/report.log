@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2019.3.1)  26 APR 2019 19:01
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2019.3.1)  26 APR 2019 22:44
 entering extended mode
  \write18 enabled.
  %&-line parsing enabled.
@@ -1530,93 +1530,91 @@ Package microtype Info: Loading generic protrusion settings for font family
 LaTeX Font Info:    Font shape `T1/ptm/bx/n' in size <12> not available
 (Font)              Font shape `T1/ptm/b/n' tried instead on input line 81.
 LaTeX Font Info:    Font shape `T1/ptm/bx/n' in size <14.4> not available
-(Font)              Font shape `T1/ptm/b/n' tried instead on input line 89.
+(Font)              Font shape `T1/ptm/b/n' tried instead on input line 85.
  [1
 
 
-{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}] [2]
-Underfull \vbox (badness 4886) has occurred while \output is active []
-
- [3]
-LaTeX Font Info:    Try loading font information for OMS+ptm on input line 287.
-
-
-(/usr/share/texlive/texmf-dist/tex/latex/psnfss/omsptm.fd
-File: omsptm.fd 
-)
-LaTeX Font Info:    Font shape `OMS/ptm/m/n' in size <10> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 287.
-
+{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}]
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [4]
-[5]
-<./results/baseline_pre_out_7_in_7_cifar10nore_5percent_acc.pdf, id=40, 433.62p
+ [2]
+[3] [4] [5]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [6]
+<./results/baseline_pre_out_7_in_7_cifar10nore_5percent_acc.pdf, id=43, 433.62p
 t x 289.08pt>
 File: ./results/baseline_pre_out_7_in_7_cifar10nore_5percent_acc.pdf Graphic fi
 le (type pdf)
 <use ./results/baseline_pre_out_7_in_7_cifar10nore_5percent_acc.pdf>
 Package pdftex.def Info: ./results/baseline_pre_out_7_in_7_cifar10nore_5percent
-_acc.pdf  used on input line 340.
+_acc.pdf  used on input line 343.
 (pdftex.def)             Requested size: 170.71652pt x 113.8126pt.
 LaTeX Font Info:    Font shape `T1/ptm/bx/n' in size <9> not available
-(Font)              Font shape `T1/ptm/b/n' tried instead on input line 340.
-<./results/pPruneWActNoNorm5_pre_out_7_in_7_cifar10nore_5percent_acc.pdf, id=41
+(Font)              Font shape `T1/ptm/b/n' tried instead on input line 343.
+<./results/pPruneWActNoNorm5_pre_out_7_in_7_cifar10nore_5percent_acc.pdf, id=44
 , 433.62pt x 289.08pt>
 File: ./results/pPruneWActNoNorm5_pre_out_7_in_7_cifar10nore_5percent_acc.pdf G
 raphic file (type pdf)
 <use ./results/pPruneWActNoNorm5_pre_out_7_in_7_cifar10nore_5percent_acc.pdf>
 Package pdftex.def Info: ./results/pPruneWActNoNorm5_pre_out_7_in_7_cifar10nore
-_5percent_acc.pdf  used on input line 344.
+_5percent_acc.pdf  used on input line 347.
 (pdftex.def)             Requested size: 170.71652pt x 113.8126pt.
 <./results/pPruneWeightNoNorm5_pre_out_7_in_7_cifar10nore_5percent_acc.pdf, id=
-42, 433.62pt x 289.08pt>
+45, 433.62pt x 289.08pt>
 File: ./results/pPruneWeightNoNorm5_pre_out_7_in_7_cifar10nore_5percent_acc.pdf
  Graphic file (type pdf)
 <use ./results/pPruneWeightNoNorm5_pre_out_7_in_7_cifar10nore_5percent_acc.pdf>
 
 Package pdftex.def Info: ./results/pPruneWeightNoNorm5_pre_out_7_in_7_cifar10no
-re_5percent_acc.pdf  used on input line 348.
+re_5percent_acc.pdf  used on input line 351.
 (pdftex.def)             Requested size: 170.71652pt x 113.8126pt.
 
-Overfull \hbox (58.53273pt too wide) in paragraph at lines 340--348
+Overfull \hbox (58.53273pt too wide) in paragraph at lines 343--351
  [][][][] 
  []
 
-<./results/baseline_pre_out_7_in_7_cifar10nore_5percent_loss.pdf, id=43, 433.62
+<./results/baseline_pre_out_7_in_7_cifar10nore_5percent_loss.pdf, id=46, 433.62
 pt x 289.08pt>
 File: ./results/baseline_pre_out_7_in_7_cifar10nore_5percent_loss.pdf Graphic f
 ile (type pdf)
 <use ./results/baseline_pre_out_7_in_7_cifar10nore_5percent_loss.pdf>
 Package pdftex.def Info: ./results/baseline_pre_out_7_in_7_cifar10nore_5percent
-_loss.pdf  used on input line 352.
+_loss.pdf  used on input line 355.
 (pdftex.def)             Requested size: 170.71652pt x 113.8126pt.
 <./results/pPruneWActNoNorm5_pre_out_7_in_7_cifar10nore_5percent_loss.pdf, id=4
-4, 433.62pt x 289.08pt>
+7, 433.62pt x 289.08pt>
 File: ./results/pPruneWActNoNorm5_pre_out_7_in_7_cifar10nore_5percent_loss.pdf 
 Graphic file (type pdf)
 <use ./results/pPruneWActNoNorm5_pre_out_7_in_7_cifar10nore_5percent_loss.pdf>
 Package pdftex.def Info: ./results/pPruneWActNoNorm5_pre_out_7_in_7_cifar10nore
-_5percent_loss.pdf  used on input line 356.
+_5percent_loss.pdf  used on input line 359.
 (pdftex.def)             Requested size: 170.71652pt x 113.8126pt.
 <./results/pPruneWeightNoNorm5_pre_out_7_in_7_cifar10nore_5percent_loss.pdf, id
-=45, 433.62pt x 289.08pt>
+=48, 433.62pt x 289.08pt>
 File: ./results/pPruneWeightNoNorm5_pre_out_7_in_7_cifar10nore_5percent_loss.pd
 f Graphic file (type pdf)
 <use ./results/pPruneWeightNoNorm5_pre_out_7_in_7_cifar10nore_5percent_loss.pdf
 >
 Package pdftex.def Info: ./results/pPruneWeightNoNorm5_pre_out_7_in_7_cifar10no
-re_5percent_loss.pdf  used on input line 360.
+re_5percent_loss.pdf  used on input line 363.
 (pdftex.def)             Requested size: 170.71652pt x 113.8126pt.
 
-Overfull \hbox (58.53273pt too wide) in paragraph at lines 352--361
+Overfull \hbox (58.53273pt too wide) in paragraph at lines 355--364
  [][][][] 
  []
 
-[6]
-Underfull \vbox (badness 3601) has occurred while \output is active []
+LaTeX Font Info:    Try loading font information for OMS+ptm on input line 381.
 
- [7 <./results/baseline_pre_out_7_in_7_cifar10nore_5percent_acc.pdf> <./results
+(/usr/share/texlive/texmf-dist/tex/latex/psnfss/omsptm.fd
+File: omsptm.fd 
+)
+LaTeX Font Info:    Font shape `OMS/ptm/m/n' in size <10> not available
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 381.
+ [7]
+Underfull \vbox (badness 3250) has occurred while \output is active []
+
+ [8 <./results/baseline_pre_out_7_in_7_cifar10nore_5percent_acc.pdf> <./results
 /pPruneWActNoNorm5_pre_out_7_in_7_cifar10nore_5percent_acc.pdf
 
 pdfTeX warning: /usr/bin/pdflatex (file ./results/pPruneWActNoNorm5_pre_out_7_i
@@ -1643,116 +1641,155 @@ pdfTeX warning: /usr/bin/pdflatex (file ./results/pPruneWeightNoNorm5_pre_out_7
 _in_7_cifar10nore_5percent_loss.pdf): PDF inclusion: multiple pdfs with page gr
 oup included in a single page
 >]
-<./results/baseline_pre_out_1_in_50_cifar10_10percent_acc.pdf, id=252, 433.62pt
+<./results/baseline_pre_out_1_in_50_cifar10_10percent_acc.pdf, id=255, 433.62pt
  x 289.08pt>
 File: ./results/baseline_pre_out_1_in_50_cifar10_10percent_acc.pdf Graphic file
  (type pdf)
 <use ./results/baseline_pre_out_1_in_50_cifar10_10percent_acc.pdf>
 Package pdftex.def Info: ./results/baseline_pre_out_1_in_50_cifar10_10percent_a
-cc.pdf  used on input line 418.
+cc.pdf  used on input line 410.
 (pdftex.def)             Requested size: 170.71652pt x 113.8126pt.
-<./results/pPruneActNoNorm5_pre_out_7_in_7_cifar10_10percent_acc.pdf, id=253, 4
+<./results/pPruneActNoNorm5_pre_out_7_in_7_cifar10_10percent_acc.pdf, id=256, 4
 33.62pt x 289.08pt>
 File: ./results/pPruneActNoNorm5_pre_out_7_in_7_cifar10_10percent_acc.pdf Graph
 ic file (type pdf)
 <use ./results/pPruneActNoNorm5_pre_out_7_in_7_cifar10_10percent_acc.pdf>
 Package pdftex.def Info: ./results/pPruneActNoNorm5_pre_out_7_in_7_cifar10_10pe
-rcent_acc.pdf  used on input line 422.
+rcent_acc.pdf  used on input line 414.
 (pdftex.def)             Requested size: 170.71652pt x 113.8126pt.
-<./results/pPruneWeightNoNorm5_pre_out_7_in_7_cifar10_10percent_acc.pdf, id=254
+<./results/pPruneWeightNoNorm5_pre_out_7_in_7_cifar10_10percent_acc.pdf, id=257
 , 433.62pt x 289.08pt>
 File: ./results/pPruneWeightNoNorm5_pre_out_7_in_7_cifar10_10percent_acc.pdf Gr
 aphic file (type pdf)
 <use ./results/pPruneWeightNoNorm5_pre_out_7_in_7_cifar10_10percent_acc.pdf>
 Package pdftex.def Info: ./results/pPruneWeightNoNorm5_pre_out_7_in_7_cifar10_1
-0percent_acc.pdf  used on input line 426.
+0percent_acc.pdf  used on input line 418.
 (pdftex.def)             Requested size: 170.71652pt x 113.8126pt.
 
-Overfull \hbox (58.53273pt too wide) in paragraph at lines 418--426
+Overfull \hbox (58.53273pt too wide) in paragraph at lines 410--418
  [][][][] 
  []
 
-<./results/baseline_pre_out_1_in_50_cifar10_10percent_loss.pdf, id=255, 433.62p
+<./results/baseline_pre_out_1_in_50_cifar10_10percent_loss.pdf, id=258, 433.62p
 t x 289.08pt>
 File: ./results/baseline_pre_out_1_in_50_cifar10_10percent_loss.pdf Graphic fil
 e (type pdf)
 <use ./results/baseline_pre_out_1_in_50_cifar10_10percent_loss.pdf>
 Package pdftex.def Info: ./results/baseline_pre_out_1_in_50_cifar10_10percent_l
-oss.pdf  used on input line 430.
+oss.pdf  used on input line 422.
 (pdftex.def)             Requested size: 170.71652pt x 113.8126pt.
-<./results/pPruneActNoNorm5_pre_out_7_in_7_cifar10_10percent_loss.pdf, id=256, 
+<./results/pPruneActNoNorm5_pre_out_7_in_7_cifar10_10percent_loss.pdf, id=259, 
 433.62pt x 289.08pt>
 File: ./results/pPruneActNoNorm5_pre_out_7_in_7_cifar10_10percent_loss.pdf Grap
 hic file (type pdf)
 <use ./results/pPruneActNoNorm5_pre_out_7_in_7_cifar10_10percent_loss.pdf>
 Package pdftex.def Info: ./results/pPruneActNoNorm5_pre_out_7_in_7_cifar10_10pe
-rcent_loss.pdf  used on input line 434.
+rcent_loss.pdf  used on input line 426.
 (pdftex.def)             Requested size: 170.71652pt x 113.8126pt.
-<./results/pPruneWeightNoNorm5_pre_out_7_in_7_cifar10_10percent_loss.pdf, id=25
-7, 433.62pt x 289.08pt>
+<./results/pPruneWeightNoNorm5_pre_out_7_in_7_cifar10_10percent_loss.pdf, id=26
+0, 433.62pt x 289.08pt>
 File: ./results/pPruneWeightNoNorm5_pre_out_7_in_7_cifar10_10percent_loss.pdf G
 raphic file (type pdf)
 <use ./results/pPruneWeightNoNorm5_pre_out_7_in_7_cifar10_10percent_loss.pdf>
 Package pdftex.def Info: ./results/pPruneWeightNoNorm5_pre_out_7_in_7_cifar10_1
-0percent_loss.pdf  used on input line 438.
+0percent_loss.pdf  used on input line 430.
 (pdftex.def)             Requested size: 170.71652pt x 113.8126pt.
 
-Overfull \hbox (58.53273pt too wide) in paragraph at lines 430--439
+Overfull \hbox (58.53273pt too wide) in paragraph at lines 422--431
  [][][][] 
  []
 
-<./results/baseline_pre_out_12_in_10_multiple_5percent_acc.pdf, id=258, 433.62p
+<./results/baseline_pre_out_15_in_10_cifar10_5percent_acc.pdf, id=261, 433.62pt
+ x 289.08pt>
+File: ./results/baseline_pre_out_15_in_10_cifar10_5percent_acc.pdf Graphic file
+ (type pdf)
+<use ./results/baseline_pre_out_15_in_10_cifar10_5percent_acc.pdf>
+Package pdftex.def Info: ./results/baseline_pre_out_15_in_10_cifar10_5percent_a
+cc.pdf  used on input line 440.
+(pdftex.def)             Requested size: 199.16928pt x 132.7799pt.
+<./results/pPruneWeightNoNorm5_pre_out_15_in_10_cifar10_5percent_acc.pdf, id=26
+2, 433.62pt x 289.08pt>
+File: ./results/pPruneWeightNoNorm5_pre_out_15_in_10_cifar10_5percent_acc.pdf G
+raphic file (type pdf)
+<use ./results/pPruneWeightNoNorm5_pre_out_15_in_10_cifar10_5percent_acc.pdf>
+Package pdftex.def Info: ./results/pPruneWeightNoNorm5_pre_out_15_in_10_cifar10
+_5percent_acc.pdf  used on input line 444.
+(pdftex.def)             Requested size: 199.16928pt x 132.7799pt.
+
+Overfull \hbox (10.85358pt too wide) in paragraph at lines 440--444
+ [][][] 
+ []
+
+<./results/baseline_pre_out_15_in_10_cifar10_5percent_loss.pdf, id=263, 433.62p
+t x 289.08pt>
+File: ./results/baseline_pre_out_15_in_10_cifar10_5percent_loss.pdf Graphic fil
+e (type pdf)
+<use ./results/baseline_pre_out_15_in_10_cifar10_5percent_loss.pdf>
+Package pdftex.def Info: ./results/baseline_pre_out_15_in_10_cifar10_5percent_l
+oss.pdf  used on input line 448.
+(pdftex.def)             Requested size: 199.16928pt x 132.7799pt.
+<./results/pPruneWeightNoNorm5_pre_out_15_in_10_cifar10_5percent_loss.pdf, id=2
+64, 433.62pt x 289.08pt>
+File: ./results/pPruneWeightNoNorm5_pre_out_15_in_10_cifar10_5percent_loss.pdf 
+Graphic file (type pdf)
+<use ./results/pPruneWeightNoNorm5_pre_out_15_in_10_cifar10_5percent_loss.pdf>
+Package pdftex.def Info: ./results/pPruneWeightNoNorm5_pre_out_15_in_10_cifar10
+_5percent_loss.pdf  used on input line 452.
+(pdftex.def)             Requested size: 199.16928pt x 132.7799pt.
+
+Overfull \hbox (10.85358pt too wide) in paragraph at lines 448--453
+ [][][] 
+ []
+
+<./results/baseline_pre_out_12_in_10_multiple_5percent_acc.pdf, id=265, 433.62p
 t x 289.08pt>
 File: ./results/baseline_pre_out_12_in_10_multiple_5percent_acc.pdf Graphic fil
 e (type pdf)
 <use ./results/baseline_pre_out_12_in_10_multiple_5percent_acc.pdf>
 Package pdftex.def Info: ./results/baseline_pre_out_12_in_10_multiple_5percent_
-acc.pdf  used on input line 448.
+acc.pdf  used on input line 462.
 (pdftex.def)             Requested size: 199.16928pt x 132.7799pt.
-<./results/pPruneWeightNorm5_pre_out_12_in_10_multiple_5percent_acc.pdf, id=259
+<./results/pPruneWeightNorm5_pre_out_12_in_10_multiple_5percent_acc.pdf, id=266
 , 433.62pt x 289.08pt>
 File: ./results/pPruneWeightNorm5_pre_out_12_in_10_multiple_5percent_acc.pdf Gr
 aphic file (type pdf)
 <use ./results/pPruneWeightNorm5_pre_out_12_in_10_multiple_5percent_acc.pdf>
 Package pdftex.def Info: ./results/pPruneWeightNorm5_pre_out_12_in_10_multiple_
-5percent_acc.pdf  used on input line 452.
+5percent_acc.pdf  used on input line 466.
 (pdftex.def)             Requested size: 199.16928pt x 132.7799pt.
 
-Overfull \hbox (10.85358pt too wide) in paragraph at lines 448--452
+Overfull \hbox (10.85358pt too wide) in paragraph at lines 462--466
  [][][] 
  []
 
-<./results/baseline_pre_out_12_in_10_multiple_5percent_loss.pdf, id=260, 433.62
+<./results/baseline_pre_out_12_in_10_multiple_5percent_loss.pdf, id=267, 433.62
 pt x 289.08pt>
 File: ./results/baseline_pre_out_12_in_10_multiple_5percent_loss.pdf Graphic fi
 le (type pdf)
 <use ./results/baseline_pre_out_12_in_10_multiple_5percent_loss.pdf>
 Package pdftex.def Info: ./results/baseline_pre_out_12_in_10_multiple_5percent_
-loss.pdf  used on input line 456.
+loss.pdf  used on input line 470.
 (pdftex.def)             Requested size: 199.16928pt x 132.7799pt.
 <./results/pPruneWeightNorm5_pre_out_12_in_10_multiple_5percent_loss.pdf, id=26
-1, 433.62pt x 289.08pt>
+8, 433.62pt x 289.08pt>
 File: ./results/pPruneWeightNorm5_pre_out_12_in_10_multiple_5percent_loss.pdf G
 raphic file (type pdf)
 <use ./results/pPruneWeightNorm5_pre_out_12_in_10_multiple_5percent_loss.pdf>
 Package pdftex.def Info: ./results/pPruneWeightNorm5_pre_out_12_in_10_multiple_
-5percent_loss.pdf  used on input line 460.
+5percent_loss.pdf  used on input line 474.
 (pdftex.def)             Requested size: 199.16928pt x 132.7799pt.
 
-Overfull \hbox (10.85358pt too wide) in paragraph at lines 456--461
+Overfull \hbox (10.85358pt too wide) in paragraph at lines 470--475
  [][][] 
  []
 
-
-Overfull \hbox (17.70714pt too wide) in paragraph at lines 479--499
+[9]
+Overfull \hbox (17.70714pt too wide) in paragraph at lines 503--523
  [][] 
  []
 
-
-LaTeX Warning: `!h' float specifier changed to `!ht'.
-
-(./report.bbl [8] [9 <./results/baseline_pre_out_1_in_50_cifar10_10percent_acc.
-pdf> <./results/pPruneActNoNorm5_pre_out_7_in_7_cifar10_10percent_acc.pdf
+[10 <./results/baseline_pre_out_1_in_50_cifar10_10percent_acc.pdf> <./results/p
+PruneActNoNorm5_pre_out_7_in_7_cifar10_10percent_acc.pdf
 
 pdfTeX warning: /usr/bin/pdflatex (file ./results/pPruneActNoNorm5_pre_out_7_in
 _7_cifar10_10percent_acc.pdf): PDF inclusion: multiple pdfs with page group inc
@@ -1777,8 +1814,31 @@ cluded in a single page
 pdfTeX warning: /usr/bin/pdflatex (file ./results/pPruneWeightNoNorm5_pre_out_7
 _in_7_cifar10_10percent_loss.pdf): PDF inclusion: multiple pdfs with page group
  included in a single page
->]) [10 <./results/baseline_pre_out_12_in_10_multiple_5percent_acc.pdf> <./resu
-lts/pPruneWeightNorm5_pre_out_12_in_10_multiple_5percent_acc.pdf
+>]
+
+LaTeX Warning: `!h' float specifier changed to `!ht'.
+
+(./report.bbl [11 <./results/baseline_pre_out_15_in_10_cifar10_5percent_acc.pdf
+> <./results/pPruneWeightNoNorm5_pre_out_15_in_10_cifar10_5percent_acc.pdf
+
+pdfTeX warning: /usr/bin/pdflatex (file ./results/pPruneWeightNoNorm5_pre_out_1
+5_in_10_cifar10_5percent_acc.pdf): PDF inclusion: multiple pdfs with page group
+ included in a single page
+> <./results/baseline_pre_out_15_in_10_cifar10_5percent_loss.pdf
+
+pdfTeX warning: /usr/bin/pdflatex (file ./results/baseline_pre_out_15_in_10_cif
+ar10_5percent_loss.pdf): PDF inclusion: multiple pdfs with page group included 
+in a single page
+> <./results/pPruneWeightNoNorm5_pre_out_15_in_10_cifar10_5percent_loss.pdf
+
+pdfTeX warning: /usr/bin/pdflatex (file ./results/pPruneWeightNoNorm5_pre_out_1
+5_in_10_cifar10_5percent_loss.pdf): PDF inclusion: multiple pdfs with page grou
+p included in a single page
+>]
+Underfull \vbox (badness 2809) has occurred while \output is active []
+
+ [12 <./results/baseline_pre_out_12_in_10_multiple_5percent_acc.pdf> <./results
+/pPruneWeightNorm5_pre_out_12_in_10_multiple_5percent_acc.pdf
 
 pdfTeX warning: /usr/bin/pdflatex (file ./results/pPruneWeightNorm5_pre_out_12_
 in_10_multiple_5percent_acc.pdf): PDF inclusion: multiple pdfs with page group 
@@ -1793,30 +1853,30 @@ tiple_5percent_loss.pdf): PDF inclusion: multiple pdfs with page group included
 pdfTeX warning: /usr/bin/pdflatex (file ./results/pPruneWeightNorm5_pre_out_12_
 in_10_multiple_5percent_loss.pdf): PDF inclusion: multiple pdfs with page group
  included in a single page
->] (./report.aux) ) 
+>]) [13] (./report.aux) ) 
 Here is how much of TeX's memory you used:
- 36328 strings out of 494847
- 868699 string characters out of 6179081
- 1113858 words of memory out of 5000000
- 38836 multiletter control sequences out of 15000+600000
- 56132 words of font info for 156 fonts, out of 8000000 for 9000
+ 36348 strings out of 494847
+ 869847 string characters out of 6179081
+ 1115441 words of memory out of 5000000
+ 38847 multiletter control sequences out of 15000+600000
+ 56712 words of font info for 162 fonts, out of 8000000 for 9000
  59 hyphenation exceptions out of 8191
- 64i,12n,96p,1507b,848s stack positions out of 5000i,500n,10000p,200000b,80000s
-{/usr/share/texlive/texmf-dist/fonts/enc/dvips/base/8r.enc} 
-</home/ssharma/.texlive2017/texmf-var/fonts/pk/ljfour/jknappen/ec/ectt1000.600p
-k></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></us
-r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/shar
-e/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texl
-ive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/share/texlive/tex
-mf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist
-/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/share/texlive/texmf-dist/fonts/t
-ype1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/u
-rw/times/utmb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmr8a
-.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on report.pdf (10 pages, 313574 bytes).
+ 64i,12n,96p,1690b,848s stack positions out of 5000i,500n,10000p,200000b,80000s
+{/usr/share/texlive/texmf-dist/fonts/enc/dvips/base/8r
+.enc} </home/ssharma/.texlive2017/texmf-var/fonts/pk/ljfour/jknappen/ec/ectt100
+0.600pk></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pf
+b></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></us
+r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/shar
+e/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/share/texli
+ve/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texm
+f-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/share/texlive/texmf-dist/f
+onts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/t
+ype1/urw/times/utmb8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/
+utmr8a.pfb></usr/share/texlive/texmf-dist/fonts/type1/urw/times/utmri8a.pfb>
+Output written on report.pdf (13 pages, 368759 bytes).
 PDF statistics:
- 670 PDF objects out of 1000 (max. 8388607)
- 145 compressed objects within 2 object streams
+ 819 PDF objects out of 1000 (max. 8388607)
+ 173 compressed objects within 2 object streams
  0 named destinations out of 1000 (max. 500000)
- 27781 words of extra memory for PDF output out of 29859 (max. 10000000)
+ 27801 words of extra memory for PDF output out of 29859 (max. 10000000)
 
